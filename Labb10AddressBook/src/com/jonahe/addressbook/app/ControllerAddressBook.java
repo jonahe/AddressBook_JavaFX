@@ -9,7 +9,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TitledPane;
 
 public class ControllerAddressBook implements Initializable{
 	/*
@@ -31,6 +33,8 @@ public class ControllerAddressBook implements Initializable{
 	ComboBox<String> comboBox_Country;
 	@FXML
 	ComboBox<String> comboBox_Gender;
+	@FXML
+	Accordion accordionMain;
 	
 	
 	@FXML 
@@ -60,6 +64,16 @@ public class ControllerAddressBook implements Initializable{
 		generateCountryList();
 		populateCountryComboBox();
 		populateGenderComboBox();
+		preselectContactsView();
+
+		
+	}
+
+	private void preselectContactsView() {
+		//preselect Contact view in accordion
+		System.out.println(accordionMain);
+		TitledPane contactPane = accordionMain.getPanes().get(0);
+		accordionMain.setExpandedPane(contactPane);
 		
 	}
 

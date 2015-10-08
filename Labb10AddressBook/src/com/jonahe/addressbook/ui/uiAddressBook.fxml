@@ -16,7 +16,7 @@
                   <Font name="Arial Black" size="25.0" />
                </font>
             </Label>
-            <Accordion>
+            <Accordion fx:id="accordionMain">
               <panes>
                 <TitledPane animated="false" text="Contacts">
                      <font>
@@ -82,7 +82,7 @@
          <children>
             <Label alignment="CENTER" prefHeight="38.0" prefWidth="321.0" text="Contact info" textAlignment="CENTER">
                <font>
-                  <Font name="Arial Black" size="25.0" />
+                  <Font name="Arial Black" size="22.0" />
                </font>
             </Label>
             <GridPane prefHeight="199.0" prefWidth="315.0">
@@ -145,6 +145,9 @@
                   <TextField GridPane.columnIndex="1" GridPane.rowIndex="5" />
                   <TextField GridPane.columnIndex="1" GridPane.rowIndex="6" />
                </children>
+               <VBox.margin>
+                  <Insets left="5.0" right="5.0" />
+               </VBox.margin>
             </GridPane>
             <Label alignment="CENTER" prefHeight="17.0" prefWidth="319.0" text="Contact connections">
                <font>
