@@ -35,13 +35,10 @@ public class ControllerAddressBook implements Initializable{
 	private Gender[] genders = Gender.values();
 	
 	private AddressManager manager;
+	private EntryJavaFXMediator formHelper;
 	
 	
 	// FXML variables
-	@FXML
-	ComboBox<String> comboBox_Country;
-	@FXML
-	ComboBox<String> comboBox_Gender;
 	@FXML
 	Accordion accordionMain;
 	@FXML
@@ -58,10 +55,16 @@ public class ControllerAddressBook implements Initializable{
 	
 	
 	// FXML variables for FORM
+	// Person
 	@FXML
 	TextField txtFldFirstName;
 	@FXML
 	TextField txtFldLastName;
+	@FXML
+	DatePicker datePicker;	
+	@FXML
+	ComboBox<String> comboBox_Gender;
+	// ContactInfo
 	@FXML
 	TextField txtFldPhoneNum;
 	@FXML
@@ -69,11 +72,18 @@ public class ControllerAddressBook implements Initializable{
 	@FXML
 	TextField txtFldCity;
 	@FXML
-	Button btnSaveContact;
+	ComboBox<String> comboBox_Country;
 	@FXML
-	DatePicker datePicker;
+	Button btnSaveContact;
 	
 	
+	@FXML
+	private void onSelectEntry(){
+		if(listViewContacts.getSelectionModel().getSelectedIndex() != -1){
+			AddressBookEntry selectedEntry = listViewContacts.getSelectionModel().getSelectedItem();
+			formHelper.viewEntry(selectedEntry);
+		} // else nothing selected -> do nothing
+	}
 	
 	@FXML
 	private void onDelete(){
@@ -95,14 +105,18 @@ public class ControllerAddressBook implements Initializable{
 	
 	@FXML 
 	private void onEdit(ActionEvent event){
-		System.out.println();
+		System.out.println("Edit..");
+		if(listViewContacts.getSelectionModel().getSelectedIndex() != -1){
+			AddressBookEntry selectedEntry = listViewContacts.getSelectionModel().getSelectedItem();
+			formHelper.editEntry(selectedEntry);
+		} // else nothing selected -> do nothing
 	}
 	
 	@FXML
 	private void onTESTEETSST(){
 		System.out.println("Testing!");
 		LocalDate pickedTime = datePicker.getValue();
-		System.out.println(pickedTime);
+		System.out.println("Picked time: " + pickedTime);
 		datePicker.setValue(LocalDate.of(1980, 01, 01));
 		
 	}
@@ -126,6 +140,7 @@ public class ControllerAddressBook implements Initializable{
 		populateGenderComboBox();
 		preselectContactsView();
 		setSearchChangeListener();
+		initializeEntryJavaFXMediator();
 		
 		manager = new AddressManager();
 		createTestPersons();
@@ -134,6 +149,17 @@ public class ControllerAddressBook implements Initializable{
 		
 	}
 
+
+	private void initializeEntryJavaFXMediator() {
+		formHelper = new EntryJavaFXMediator( 	txtFldFirstName, 
+												txtFldLastName, 
+												datePicker, 
+												comboBox_Gender, 
+												txtFldPhoneNum, 
+												txtFldStreetName, 
+												txtFldCity, 
+												comboBox_Country);
+	}
 
 	private void setSearchChangeListener() {
 		txtFldSearchContacts.textProperty().addListener( (textProperty, oldValue, newValue) -> {
@@ -152,7 +178,7 @@ public class ControllerAddressBook implements Initializable{
 	}
 
 	private void createTestPersons() {
-		Person kurt = new Person("Kurt", "Åkesson", Gender.MALE, LocalDate.of(1987, 6, 19));
+		Person kurt = new Person("Kurt", "Åkesson", Gender.MALE, LocalDate.of(1982, 11, 24));
 		ContactInfo erInfo = new ContactInfo("0700123456", "Sweden", "Gothenburg", "Tredje långgatan 11");
 		manager.createEntry(kurt, erInfo);
 		
@@ -184,7 +210,7 @@ public class ControllerAddressBook implements Initializable{
 	
 	private void preselectContactsView() {
 		//preselect Contact view in accordion
-		System.out.println(accordionMain);
+		System.out.println("Accordion main" + accordionMain);
 		TitledPane contactPane = accordionMain.getPanes().get(0);
 		accordionMain.setExpandedPane(contactPane);
 		
@@ -209,9 +235,9 @@ public class ControllerAddressBook implements Initializable{
 		//TODO: the preselected value should be different if we are working with an entry
 		Locale currentLocale = Locale.getDefault();
 		String currentCountry = currentLocale.getDisplayCountry(Locale.ENGLISH);
-		System.out.println(currentCountry);
+		System.out.println("Current country: " + currentCountry);
 		int currentCountryIndex = comboBox_Country.getItems().indexOf(currentCountry);
-		System.out.println(currentCountryIndex);
+		System.out.println("Current country index: " +currentCountryIndex);
 		comboBox_Country.getSelectionModel().select(currentCountryIndex);
 	}
 	

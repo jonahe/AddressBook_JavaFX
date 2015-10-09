@@ -29,10 +29,10 @@ public class AddressBookEntry {
 	public void setPerson(Person person) {
 		this.person = person;
 	}
-	public ContactInfo getAddress() {
+	public ContactInfo getContactInfo() {
 		return contactInfo;
 	}
-	public void setAddress(ContactInfo address) {
+	public void setContactInfo(ContactInfo address) {
 		this.contactInfo = address;
 	}
 	
