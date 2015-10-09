@@ -9,11 +9,13 @@ public class Person {
 	private LocalDate birthDate;
 
 	public Person(	String firstName, 
-					String lastName, 
+					String lastName,
+					Gender gender,
 					LocalDate birthDate 
 					) {
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.gender = gender;
 		this.birthDate = birthDate;
 	}
 	

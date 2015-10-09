@@ -42,6 +42,28 @@ public class AddressManager extends BasicManager<AddressBookEntry> {
 		personToUpdate.setBirthDate(birthDate);
 		personToUpdate.setGender(gender);
 	}
+	
+	public void updateContactInfo(	ContactInfo contactInfoToUpdate,
+									String phoneNumber,
+									String street,
+									String city,
+									String country) {
+		
+		contactInfoToUpdate.setPhoneNumber(phoneNumber);
+		contactInfoToUpdate.setStreet(street);
+		contactInfoToUpdate.setCity(city);
+		contactInfoToUpdate.setCountry(country);
+	}
+	
+	/**
+	 * Creates AND adds to entry list
+	 * @param person
+	 * @param contactInfo
+	 */
+	public void createEntry(Person person, ContactInfo contactInfo){
+		this.addEntry(new AddressBookEntry(person, contactInfo));
+	}
+								
 								
 				
 

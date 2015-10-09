@@ -32,14 +32,13 @@
                                           <Font name="Arial Black" size="12.0" />
                                        </font>
                                     </Label>
-                                    <TextField />
-                                    <Button mnemonicParsing="false" onAction="#onTESTEETSST" text="Search" />
+                                    <TextField fx:id="txtFldSearchContacts" prefHeight="29.0" prefWidth="225.0" />
                                  </children>
                                  <VBox.margin>
                                     <Insets right="5.0" />
                                  </VBox.margin>
                               </HBox>
-                              <ListView prefHeight="254.0" prefWidth="287.0" />
+                              <ListView fx:id="listViewContacts" prefHeight="254.0" prefWidth="287.0" />
                               <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0">
                                  <children>
                                     <Button mnemonicParsing="false" text="Edit">
@@ -101,7 +100,6 @@
                   <RowConstraints maxHeight="35.0" minHeight="10.0" valignment="CENTER" vgrow="NEVER" />
                   <RowConstraints minHeight="10.0" valignment="CENTER" vgrow="NEVER" />
                   <RowConstraints minHeight="10.0" valignment="CENTER" vgrow="NEVER" />
-                  <RowConstraints minHeight="10.0" valignment="CENTER" vgrow="NEVER" />
                   <RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="ALWAYS" />
                   <RowConstraints maxHeight="36.33331298828125" vgrow="ALWAYS" />
                </rowConstraints>
@@ -129,35 +127,29 @@
                         <Font name="Arial" size="13.0" />
                      </font>
                   </Label>
-                  <Label text="Country" GridPane.rowIndex="10">
+                  <Label text="Country" GridPane.rowIndex="9">
                      <font>
                         <Font name="Arial" size="13.0" />
                      </font>
                   </Label>
-                  <Label text="City" GridPane.rowIndex="9">
-                     <font>
-                        <Font name="Arial" size="13.0" />
-                     </font>
-                  </Label>
-                  <Label text="Street number" GridPane.rowIndex="8">
+                  <Label text="City" GridPane.rowIndex="8">
                      <font>
                         <Font name="Arial" size="13.0" />
                      </font>
                   </Label>
                   <ComboBox fx:id="comboBox_Gender" maxHeight="12.0" prefHeight="12.0" prefWidth="147.0" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS" />
-                  <ComboBox fx:id="comboBox_Country" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                  <ComboBox fx:id="comboBox_Country" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
                   <TextField fx:id="txtFldFirstName" GridPane.columnIndex="1" />
                   <TextField fx:id="txtFldLastName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <TextField fx:id="txtFldStreetName" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                  <TextField fx:id="txtFldStreetNum" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-                  <TextField fx:id="txtFldCity" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                  <TextField fx:id="txtFldCity" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                   <Label text="Phone number" GridPane.rowIndex="5">
                      <font>
                         <Font name="Arial" size="13.0" />
                      </font>
                   </Label>
                   <TextField fx:id="txtFldPhoneNum" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                  <Button fx:id="btnSaveContact" mnemonicParsing="false" prefHeight="25.0" prefWidth="91.0" text="Save changes" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="12" />
+                  <Button fx:id="btnSaveContact" mnemonicParsing="false" prefHeight="25.0" prefWidth="91.0" text="Save changes" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="11" />
                   <Label text="Date of birth" GridPane.rowIndex="2">
                      <font>
                         <Font name="Arial" size="13.0" />

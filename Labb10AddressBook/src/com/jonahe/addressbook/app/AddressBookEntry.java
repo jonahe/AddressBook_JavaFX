@@ -6,12 +6,12 @@ import java.util.List;
 public class AddressBookEntry {
 
 	private Person person;
-	private Address address;
+	private ContactInfo contactInfo;
 	private List<Person> contacts;
 	
-	public AddressBookEntry(Person person, Address address){
+	public AddressBookEntry(Person person, ContactInfo contactInfo){
 		this.person = person;
-		this.address = address;
+		this.contactInfo = contactInfo;
 		this.contacts = new ArrayList<Person>();
 	}
 	
@@ -29,12 +29,19 @@ public class AddressBookEntry {
 	public void setPerson(Person person) {
 		this.person = person;
 	}
-	public Address getAddress() {
-		return address;
+	public ContactInfo getAddress() {
+		return contactInfo;
 	}
-	public void setAddress(Address address) {
-		this.address = address;
+	public void setAddress(ContactInfo address) {
+		this.contactInfo = address;
 	}
 	
+	
+	@Override
+	public String toString(){
+		// fullname 	 city, street
+		String format = "%s - %s, %s";
+		return String.format(format, person.getFullName(), contactInfo.getCity(), contactInfo.getStreet());
+	}
 	
 }

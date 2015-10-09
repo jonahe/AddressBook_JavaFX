@@ -4,9 +4,14 @@ import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,6 +20,7 @@ import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 
@@ -32,6 +38,8 @@ public class ControllerAddressBook implements Initializable{
 	private ArrayList<String> countries;
 	private Gender[] genders = Gender.values();
 	
+	private AddressManager manager;
+	
 	
 	// FXML variables
 	@FXML
@@ -40,6 +48,10 @@ public class ControllerAddressBook implements Initializable{
 	ComboBox<String> comboBox_Gender;
 	@FXML
 	Accordion accordionMain;
+	@FXML
+	TextField txtFldSearchContacts;
+	@FXML
+	ListView<AddressBookEntry> listViewContacts;
 	
 	// FXML variables for FORM
 	@FXML
@@ -50,8 +62,6 @@ public class ControllerAddressBook implements Initializable{
 	TextField txtFldPhoneNum;
 	@FXML
 	TextField txtFldStreetName;
-	@FXML
-	TextField txtFldStreetNum;
 	@FXML
 	TextField txtFldCity;
 	@FXML
@@ -92,10 +102,63 @@ public class ControllerAddressBook implements Initializable{
 		populateCountryComboBox();
 		populateGenderComboBox();
 		preselectContactsView();
+		setSearchChangeListener();
+		
+		manager = new AddressManager();
+		createTestPersons();
+		populatePrimaryListView();
 
 		
 	}
 
+
+	private void setSearchChangeListener() {
+		txtFldSearchContacts.textProperty().addListener( (textProperty, oldValue, newValue) -> {
+			
+			if(! "".equals(newValue)){ // if user has entered a string to search for
+				// create Predicate that matches those entries that contain the searchField value
+				Predicate<AddressBookEntry> predicateToFilterBy =  entry -> entry.toString().toLowerCase().contains(newValue.toLowerCase());
+				// use that predicate to filter out matching entries, and populate the list with them.
+				List<AddressBookEntry> matchingEntries = manager.getAllMatching(predicateToFilterBy);
+				populatePrimaryListView(matchingEntries);
+			} else {
+				// no search string  -> show all
+				populatePrimaryListView();
+			}
+		});
+	}
+
+	private void createTestPersons() {
+		Person kurt = new Person("Kurt", "Åkesson", Gender.MALE, LocalDate.of(1987, 6, 19));
+		ContactInfo erInfo = new ContactInfo("0700123456", "Sweden", "Gothenburg", "Tredje långgatan 11");
+		manager.createEntry(kurt, erInfo);
+		
+		Person emma = new Person("Emma", "Karlsson", Gender.FEMALE, LocalDate.of(1986, 2, 15));
+		ContactInfo emInfo = new ContactInfo("0710123456", "Denmark", "Copenhagen", "Oahaehegehe 12");
+		manager.createEntry(emma, emInfo);
+		
+		Person filip = new Person("Filip", "Gustavsson", Gender.MALE, LocalDate.of(1975, 8, 4));
+		ContactInfo fiInfo = new ContactInfo("0720123456", "Sweden", "Gothenburg", "Tredje långgatan 13");
+		manager.createEntry(filip, fiInfo);
+		
+		Person kim = new Person("Kim", "Robinsson", Gender.OTHER, LocalDate.of(1989, 1, 30));
+		ContactInfo kiInfo = new ContactInfo("0730123456", "Sweden", "Gothenburg", "Tredje långgatan 14");
+		manager.createEntry(kim, kiInfo);
+	}
+
+	private void populatePrimaryListView() {
+		List<AddressBookEntry> allEntries = manager.getAll();
+		listViewContacts.getItems().clear();
+		listViewContacts.getItems().addAll(allEntries);
+		
+	}
+	
+	private void populatePrimaryListView(List<AddressBookEntry> entries) {
+		listViewContacts.getItems().clear();
+		listViewContacts.getItems().addAll(entries);
+		
+	}
+	
 	private void preselectContactsView() {
 		//preselect Contact view in accordion
 		System.out.println(accordionMain);
@@ -128,5 +191,7 @@ public class ControllerAddressBook implements Initializable{
 		System.out.println(currentCountryIndex);
 		comboBox_Country.getSelectionModel().select(currentCountryIndex);
 	}
+	
+	
 
 }
