@@ -1,11 +1,14 @@
 package com.jonahe.addressbook.app;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 
 public class AddressManager extends BasicManager<AddressBookEntry> {
+	
+	
 
 	public List<AddressBookEntry> getEntries() {
 		return super.getAll();
@@ -26,6 +29,21 @@ public class AddressManager extends BasicManager<AddressBookEntry> {
 	public ArrayList<AddressBookEntry> getAllEntriesMatching(Predicate<? super AddressBookEntry> predicateToFilterBy) {
 		return super.getAllMatching(predicateToFilterBy);
 	}
+	
+	
+	public void updatePerson( 	Person personToUpdate,
+								String firstName,
+								String lastName,
+								LocalDate birthDate,
+								Gender gender) {
+		
+		personToUpdate.setFirstName(firstName);
+		personToUpdate.setLastName(lastName);
+		personToUpdate.setBirthDate(birthDate);
+		personToUpdate.setGender(gender);
+	}
+								
+				
 
 	
 }

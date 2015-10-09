@@ -1,29 +1,32 @@
 package com.jonahe.addressbook.app;
 
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
 
 public class Person {
 	private String firstName;
 	private String lastName;
-	private Date birthDate;
-	private List<Person> contacts;
-	private Address address;
-	
-	
+	private Gender gender;
+	private LocalDate birthDate;
+
 	public Person(	String firstName, 
 					String lastName, 
-					Date birthDate, 
-					List<Person> contacts, 
-					Address address
+					LocalDate birthDate 
 					) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.birthDate = birthDate;
-		this.contacts = contacts;
-		this.address = address;
 	}
 	
+	
+	
+	public Gender getGender() {
+		return gender;
+	}
+	
+	
+	public void setGender(Gender gender) {
+		this.gender = gender;
+	}
 	
 	public String getFirstName() {
 		return firstName;
@@ -45,25 +48,13 @@ public class Person {
 	}
 
 
-	public void setAddress(Address address) {
-		this.address = address;
-	}
-	public Address getAddress() {
-		return address;
-	}
-
-	public Date getBirthDate() {
+	public LocalDate getBirthDate() {
 		return birthDate;
 	}
-	public void setBirthDate(Date birthDate) {
+	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
-	public List<Person> getContacts() {
-		return contacts;
-	}
-	public void setContacts(List<Person> contacts) {
-		this.contacts = contacts;
-	}
+
 	
 	public String getFullName(){
 		return getFirstName() + " " + getLastName();

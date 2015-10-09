@@ -1,6 +1,8 @@
 package com.jonahe.addressbook.app;
 
 import java.net.URL;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -10,7 +12,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Accordion;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 
 public class ControllerAddressBook implements Initializable{
@@ -36,6 +41,24 @@ public class ControllerAddressBook implements Initializable{
 	@FXML
 	Accordion accordionMain;
 	
+	// FXML variables for FORM
+	@FXML
+	TextField txtFldFirstName;
+	@FXML
+	TextField txtFldLastName;
+	@FXML
+	TextField txtFldPhoneNum;
+	@FXML
+	TextField txtFldStreetName;
+	@FXML
+	TextField txtFldStreetNum;
+	@FXML
+	TextField txtFldCity;
+	@FXML
+	Button btnSaveContact;
+	@FXML
+	DatePicker datePicker;
+	
 	
 	@FXML 
 	private void onEdit(ActionEvent event){
@@ -45,6 +68,10 @@ public class ControllerAddressBook implements Initializable{
 	@FXML
 	private void onTESTEETSST(){
 		System.out.println("Testing!");
+		LocalDate pickedTime = datePicker.getValue();
+		System.out.println(pickedTime);
+		datePicker.setValue(LocalDate.of(1980, 01, 01));
+		
 	}
 	
 	private void generateCountryList(){

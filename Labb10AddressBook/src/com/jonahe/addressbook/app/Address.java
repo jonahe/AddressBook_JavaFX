@@ -1,16 +1,28 @@
 package com.jonahe.addressbook.app;
 
 public class Address {
+	private String country;
 	private String town;
 	private String street;
 	private int streetNumber;
 	
 	
-	public Address(String town, String street, int streetNumber) {
+	public Address(String country, String town, String street, int streetNumber) {
 		super();
+		this.country = country;
 		this.town = town;
 		this.street = street;
 		this.streetNumber = streetNumber;
+	}
+	
+
+	public String getCountry() {
+		return country;
+	}
+
+
+	public void setCountry(String country) {
+		this.country = country;
 	}
 
 

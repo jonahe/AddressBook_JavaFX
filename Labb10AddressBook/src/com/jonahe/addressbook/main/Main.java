@@ -21,6 +21,7 @@ public class Main extends Application{
 		Scene scene = new Scene(root);
 		
 		primaryStage.setScene(scene);
+		scene.getStylesheets().add("/com/jonahe/addressbook/ui/uiAddressBook.css");
 		primaryStage.setTitle("Address book");
 		primaryStage.show();
 		
