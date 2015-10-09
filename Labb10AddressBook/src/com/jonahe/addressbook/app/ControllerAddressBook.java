@@ -1,7 +1,6 @@
 package com.jonahe.addressbook.app;
 
 import java.net.URL;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +8,6 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
-import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -52,6 +48,14 @@ public class ControllerAddressBook implements Initializable{
 	TextField txtFldSearchContacts;
 	@FXML
 	ListView<AddressBookEntry> listViewContacts;
+	// main buttons
+	@FXML
+	Button btnEdit;
+	@FXML
+	Button btnDelete;
+	@FXML
+	Button btnCreate;
+	
 	
 	// FXML variables for FORM
 	@FXML
@@ -69,6 +73,25 @@ public class ControllerAddressBook implements Initializable{
 	@FXML
 	DatePicker datePicker;
 	
+	
+	
+	@FXML
+	private void onDelete(){
+		System.out.println("Deleting entry..");
+		// if we have a selected entry
+		if(listViewContacts.getSelectionModel().getSelectedIndex() != -1){
+			// remove the selected entry from manager, then populate list from manager
+			manager.remove(listViewContacts.getSelectionModel().getSelectedItem());
+			populatePrimaryListView();
+			// if the searchbox had something in it, make the search again
+			String searchQuery = txtFldSearchContacts.getText();
+			if(! searchQuery.equals("")){
+				// trigger the change listener
+				txtFldSearchContacts.setText("");
+				txtFldSearchContacts.setText(searchQuery);
+			}
+		} // else nothing
+	}
 	
 	@FXML 
 	private void onEdit(ActionEvent event){

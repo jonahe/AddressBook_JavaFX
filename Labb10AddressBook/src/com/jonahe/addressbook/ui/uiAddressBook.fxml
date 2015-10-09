@@ -38,15 +38,15 @@
                                     <Insets right="5.0" />
                                  </VBox.margin>
                               </HBox>
-                              <ListView fx:id="listViewContacts" prefHeight="254.0" prefWidth="287.0" />
+                              <ListView fx:id="listViewContacts" prefHeight="337.0" prefWidth="282.0" />
                               <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0">
                                  <children>
-                                    <Button mnemonicParsing="false" text="Edit">
+                                    <Button fx:id="btnEdit" mnemonicParsing="false" text="Edit">
                                        <font>
                                           <Font name="Arial Black" size="14.0" />
                                        </font>
                                     </Button>
-                                    <Button mnemonicParsing="false" text="Delete">
+                                    <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#onDelete" text="Delete">
                                        <font>
                                           <Font name="Arial Black" size="14.0" />
                                        </font>
@@ -54,7 +54,7 @@
                                           <Insets right="30.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" onAction="#onTESTEETSST" text="Create new">
+                                    <Button fx:id="btnCreate" mnemonicParsing="false" onAction="#onTESTEETSST" text="Create new">
                                        <font>
                                           <Font name="Arial Black" size="14.0" />
                                        </font>
