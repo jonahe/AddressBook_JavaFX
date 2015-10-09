@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 
-import com.jonahe.basicManager.BasicManager;
-
 public class AddressManager extends BasicManager<AddressBookEntry> {
 
 	public List<AddressBookEntry> getEntries() {
