@@ -4,9 +4,11 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
 import javafx.beans.binding.BooleanBinding;
@@ -22,6 +24,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.layout.GridPane;
 
 public class ControllerAddressBook implements Initializable{
 	/*
@@ -61,6 +64,7 @@ public class ControllerAddressBook implements Initializable{
 	
 	
 	// FXML variables for FORM
+	
 	// Person
 	@FXML
 	TextField txtFldFirstName;
@@ -83,6 +87,7 @@ public class ControllerAddressBook implements Initializable{
 	Button btnSaveContact;
 	
 	
+	
 	@FXML
 	private void onSelectEntry(){
 		if(listViewContacts.getSelectionModel().getSelectedIndex() != -1){
@@ -97,7 +102,7 @@ public class ControllerAddressBook implements Initializable{
 		// if we have a selected entry
 		if(listViewContacts.getSelectionModel().getSelectedIndex() != -1){
 			// remove the selected entry from manager, then populate list from manager
-			manager.remove(listViewContacts.getSelectionModel().getSelectedItem());
+			manager.removeEntry(listViewContacts.getSelectionModel().getSelectedItem());
 			populatePrimaryListView();
 			// if the searchbox had something in it, make the search again
 			if(! searchFieldEmpty.get()){
@@ -122,7 +127,7 @@ public class ControllerAddressBook implements Initializable{
 		System.out.println("Edit..");
 		if(listViewContacts.getSelectionModel().getSelectedIndex() != -1){
 			AddressBookEntry selectedEntry = listViewContacts.getSelectionModel().getSelectedItem();
-			formHelper.editEntry(selectedEntry);
+			formHelper.editEntrySetup(selectedEntry);
 		} // else nothing selected -> do nothing
 	}
 	
@@ -143,7 +148,8 @@ public class ControllerAddressBook implements Initializable{
 			try{
 				System.out.println("Trying to create new entry");
 				AddressBookEntry entry = formHelper.createEntryFromFields();
-				manager.add(entry);
+				manager.addEntry(entry);
+				sortEntries();
 				populatePrimaryListView();
 				formHelper.clearFields();
 				
@@ -154,6 +160,15 @@ public class ControllerAddressBook implements Initializable{
 		} else if (btnText.equals("Save changes")) {
 			try{
 				//TODO: update info
+				AddressBookEntry entryToUpdate = listViewContacts.getSelectionModel().getSelectedItem();
+				if(entryToUpdate != null){
+					formHelper.updateEntry(entryToUpdate);
+					sortEntries(); // order might have to change
+					populatePrimaryListView(); // refresh listview
+					listViewContacts.getSelectionModel().select(entryToUpdate); // reselect the entry
+				} else {
+					System.out.println("Can't save, because no selected entry detected");
+				}
 				System.out.println("About to save changes");
 				
 			} catch(Exception e) {
@@ -201,7 +216,6 @@ public class ControllerAddressBook implements Initializable{
 		populatePrimaryListView();
 		
 		bindSearchFieldProperty();
-
 		
 	}
 
@@ -240,7 +254,7 @@ public class ControllerAddressBook implements Initializable{
 				// create Predicate that matches those entries that contain the searchField value
 				Predicate<AddressBookEntry> predicateToFilterBy =  entry -> entry.toString().toLowerCase().contains(newValue.toLowerCase());
 				// use that predicate to filter out matching entries, and populate the list with them.
-				List<AddressBookEntry> matchingEntries = manager.getAllMatching(predicateToFilterBy);
+				List<AddressBookEntry> matchingEntries = manager.getAllEntriesMatching(predicateToFilterBy);
 				populatePrimaryListView(matchingEntries);
 			} else {
 				// no search string  -> show all
@@ -267,12 +281,18 @@ public class ControllerAddressBook implements Initializable{
 		manager.createEntry(kim, kiInfo);
 		
 		// create random entries..
-		manager.addAll(AddressBookEntry.createRandomEntries(100));
-		Collections.sort(manager.getAll(), (e1, e2) -> e1.toString().compareTo(e2.toString()));
+		manager.addEntries(AddressBookEntry.createRandomEntries(100));
+		sortEntries();
+	}
+
+	private void sortEntries() {
+		Comparator<AddressBookEntry> byAlphabeticAsc = (e1, e2) -> e1.toString().compareTo(e2.toString());
+		Collections.sort(manager.getEntries(), byAlphabeticAsc);
+		
 	}
 
 	private void populatePrimaryListView() {
-		List<AddressBookEntry> allEntries = manager.getAll();
+		List<AddressBookEntry> allEntries = manager.getEntries();
 		listViewContacts.getItems().clear();
 		listViewContacts.getItems().addAll(allEntries);
 		

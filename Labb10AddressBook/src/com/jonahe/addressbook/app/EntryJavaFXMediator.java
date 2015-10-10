@@ -1,6 +1,9 @@
 package com.jonahe.addressbook.app;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -30,6 +33,9 @@ public class EntryJavaFXMediator {
 	
 	private Button btnSaveContact;
 	
+	boolean firstTimeStyling = true;
+	List<TextField> textFields;
+	
 	
 	public EntryJavaFXMediator(	TextField txtFldFirstName, 
 								TextField txtFldLastName, 
@@ -51,6 +57,10 @@ public class EntryJavaFXMediator {
 		this.txtFldCity = txtFldCity;
 		this.comboBox_Country = comboBox_Country;
 		this.btnSaveContact = btnSaveContact;
+		
+		textFields = new ArrayList<TextField>();
+		Collections.addAll(textFields, txtFldFirstName, txtFldLastName, txtFldPhoneNum, txtFldStreetName, txtFldCity);
+		
 	}
 	
 	/**
@@ -78,7 +88,7 @@ public class EntryJavaFXMediator {
 
 	}
 	
-	public void editEntry(AddressBookEntry entry){
+	public void editEntrySetup(AddressBookEntry entry){
 		viewEntry(entry);
 		setTextFieldEditability(true);
 		btnSaveContact.setVisible(true);
@@ -90,6 +100,8 @@ public class EntryJavaFXMediator {
 		setTextFieldEditability(true);
 		btnSaveContact.setVisible(true);
 		btnSaveContact.setText("Save new entry");
+		// set focus
+		txtFldFirstName.requestFocus();
 	}
 	
 	public AddressBookEntry createEntryFromFields(){
@@ -112,6 +124,28 @@ public class EntryJavaFXMediator {
 		return new AddressBookEntry(person, cInfo);
 	}
 	
+	public void updateEntry(AddressBookEntry entryToUpdate){
+		AddressBookEntry tempEntry = createEntryFromFields();
+		Person tempPerson = tempEntry.getPerson();
+		ContactInfo tempContactInfo = tempEntry.getContactInfo();
+		
+		// replace from fields from temp
+		Person person = entryToUpdate.getPerson();
+		person.setFirstName(tempPerson.getFirstName());
+		person.setLastName(tempPerson.getLastName());
+		person.setGender(tempPerson.getGender());
+		person.setBirthDate(tempPerson.getBirthDate());
+		
+		ContactInfo cInfo = entryToUpdate.getContactInfo();
+		cInfo.setPhoneNumber(tempContactInfo.getPhoneNumber());
+		cInfo.setStreet(tempContactInfo.getStreet());
+		cInfo.setCity(tempContactInfo.getCity());
+		cInfo.setCountry(tempContactInfo.getCountry());
+		
+		// the field should have all its part updated (excluding the contact connections field..)
+		
+	}
+	
 	
 	public void clearFields(){
 		txtFldFirstName.setText("");
@@ -125,17 +159,33 @@ public class EntryJavaFXMediator {
 		comboBox_Country.setValue("Sweden");
 		
 		btnSaveContact.setVisible(false);
+		
 	}
 	
+	/**
+	 * Changes the editability of the fields, as well as adds a styleClass so that "locked" fields look locked
+	 * 
+	 * @param editable
+	 */
 	private void setTextFieldEditability(boolean editable){
-		txtFldFirstName.setEditable(editable);
-		txtFldLastName.setEditable(editable);
-		txtFldPhoneNum.setEditable(editable);
-		txtFldStreetName.setEditable(editable);
-		txtFldCity.setEditable(editable);
+		// loop
+		textFields.forEach( txtFld -> {
+			
+			txtFld.setEditable(editable);
+			String styleClass = editable ? "no-rules-apply-to-me" : "txtFldViewMode";
+			
+			if(! firstTimeStyling){
+				txtFld.getStyleClass().remove(txtFld.getStyleClass().size()-1);
+			} else {
+				// nothing
+				firstTimeStyling = false;
+			}
+			txtFld.getStyleClass().add(styleClass); // see rule for .txtFldViewMode  in file  uiAddressBook.css
+			
+			
+		});
+
 	}
-	
-	
-	
+
 
 }

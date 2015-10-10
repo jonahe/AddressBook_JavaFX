@@ -1,5 +1,24 @@
+.form {
+	-fx-border-width: 1;
+	-fx-border-radius: 3;
+	-fx-background-color: #f7f7f7;
+	-fx-border-style: dotted;
+	-fx-border-color: #d2d2d2;
+}
 
-#gridpanePersonForm {
-	fx-background-color: #dadada;
+
+#root {
 	
 }
+
+
+
+.txtFldViewMode {
+	-fx-background-color: #f7f7f7;
+	-fx-border-width: 1;
+	-fx-border-radius: 3;
+	-fx-border-style: dotted;
+	-fx-border-color: #d2d2d2;
+}
+
+

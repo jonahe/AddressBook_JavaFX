@@ -18,9 +18,11 @@ public class Main extends Application{
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("/com/jonahe/addressbook/ui/uiAddressBook.fxml"));
+		// root.getStylesheets().add("/com/jonahe/addressbook/ui/uiAddressBook.css");
 		Scene scene = new Scene(root);
 		
 		primaryStage.setScene(scene);
+		scene.getStylesheets().clear();
 		scene.getStylesheets().add("/com/jonahe/addressbook/ui/uiAddressBook.css");
 		primaryStage.setTitle("Address book");
 		primaryStage.show();

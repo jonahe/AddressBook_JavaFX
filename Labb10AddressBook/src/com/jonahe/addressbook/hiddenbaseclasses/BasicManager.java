@@ -1,4 +1,4 @@
-package com.jonahe.addressbook.app;
+package com.jonahe.addressbook.hiddenbaseclasses;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,20 +20,20 @@ public abstract class BasicManager<T> {
 	}
 	
 	
-	public List<T> getAll(){
+	protected List<T> getAll(){
 		return objects;
 	}
 	
 	// C for child class
-	public <C extends T> void add(C objectToAdd){
+	protected <C extends T> void add(C objectToAdd){
 		objects.add(objectToAdd);
 	}
 	
-	public void addAll(Collection<? extends T> objectsToAdd){
+	protected void addAll(Collection<? extends T> objectsToAdd){
 		objects.addAll(objectsToAdd);
 	}
 	
-	public <C extends T> boolean remove(C objectToRemove){
+	protected <C extends T> boolean remove(C objectToRemove){
 		return objects.remove(objectToRemove);
 	}
 	
@@ -43,7 +43,7 @@ public abstract class BasicManager<T> {
 	 * @param predicateToFilterBy
 	 * @return ArrayList of matches (may be empty)
 	 */
-	public ArrayList<T> getAllMatching(Predicate<? super T> predicateToFilterBy){
+	protected ArrayList<T> getAllMatching(Predicate<? super T> predicateToFilterBy){
 		return objects.stream()
 				.filter(predicateToFilterBy)
 				.collect(Collectors.toCollection(ArrayList<T>::new));

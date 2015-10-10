@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 
+import com.jonahe.addressbook.hiddenbaseclasses.BasicManager;
+
 public class AddressManager extends BasicManager<AddressBookEntry> {
 	
 	
