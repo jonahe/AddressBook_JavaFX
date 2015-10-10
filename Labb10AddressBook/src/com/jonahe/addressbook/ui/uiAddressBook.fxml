@@ -70,7 +70,7 @@
                         <Font name="Arial Black" size="16.0" />
                      </font>
                      <content>
-                        <ListView prefHeight="200.0" prefWidth="200.0" />
+                        <ListView fx:id="listViewBirthdays" prefHeight="200.0" prefWidth="200.0" />
                      </content>
                   </TitledPane>
               </panes>
@@ -86,8 +86,8 @@
             </Label>
             <GridPane prefHeight="290.0" prefWidth="300.0" styleClass="form" vgap="2.0">
                <columnConstraints>
-                  <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" maxWidth="160.0" minWidth="10.0" />
-                  <ColumnConstraints maxWidth="160.0" minWidth="10.0" />
+                  <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" maxWidth="160.0" minWidth="10.0" prefWidth="119.0" />
+                  <ColumnConstraints maxWidth="189.0" minWidth="10.0" prefWidth="161.0" />
                </columnConstraints>
                <rowConstraints>
                   <RowConstraints maxHeight="21.666667938232422" minHeight="10.0" valignment="CENTER" vgrow="NEVER" />
@@ -140,8 +140,8 @@
                         <Font name="Arial" size="13.0" />
                      </font>
                   </Label>
-                  <ComboBox fx:id="comboBox_Gender" maxHeight="12.0" prefHeight="12.0" prefWidth="147.0" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS" />
-                  <ComboBox fx:id="comboBox_Country" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                  <ComboBox fx:id="comboBox_Gender" maxHeight="25.0" prefHeight="25.0" prefWidth="163.0" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS" />
+                  <ComboBox fx:id="comboBox_Country" prefHeight="25.0" prefWidth="161.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
                   <TextField fx:id="txtFldFirstName" editable="false" GridPane.columnIndex="1" />
                   <TextField fx:id="txtFldLastName" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <TextField fx:id="txtFldStreetName" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="7" />

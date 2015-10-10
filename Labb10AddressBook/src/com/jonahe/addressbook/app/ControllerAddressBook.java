@@ -2,17 +2,18 @@ package com.jonahe.addressbook.app;
 
 import java.net.URL;
 import java.time.LocalDate;
+
+
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.BooleanProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,7 +25,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
-import javafx.scene.layout.GridPane;
 
 public class ControllerAddressBook implements Initializable{
 	/*
@@ -61,6 +61,9 @@ public class ControllerAddressBook implements Initializable{
 	Button btnDelete;
 	@FXML
 	Button btnCreate;
+	
+	@FXML
+	ListView<String> listViewBirthdays;
 	
 	
 	// FXML variables for FORM
@@ -216,6 +219,7 @@ public class ControllerAddressBook implements Initializable{
 		populatePrimaryListView();
 		
 		bindSearchFieldProperty();
+		populateUpcommingBirthdaysList();
 		
 	}
 
@@ -281,7 +285,7 @@ public class ControllerAddressBook implements Initializable{
 		manager.createEntry(kim, kiInfo);
 		
 		// create random entries..
-		manager.addEntries(AddressBookEntry.createRandomEntries(100));
+		manager.addEntries(AddressBookEntry.createRandomEntries(300));
 		sortEntries();
 	}
 
@@ -335,6 +339,53 @@ public class ControllerAddressBook implements Initializable{
 		int currentCountryIndex = comboBox_Country.getItems().indexOf(currentCountry);
 		System.out.println("Current country index: " +currentCountryIndex);
 		comboBox_Country.getSelectionModel().select(currentCountryIndex);
+	}
+	
+	private void populateUpcommingBirthdaysList(){
+		
+		List<AddressBookEntry> matchingEntries = getAllEntriesWithBirthDaysWithinAWeek();
+		
+		List<String> personsWithBirthDaySoon = new ArrayList<String>();
+		
+		for(AddressBookEntry entry : matchingEntries){
+			LocalDate birthDate = entry.getPerson().getBirthDate();
+			LocalDate currentDate = LocalDate.now();
+			
+			int ageToCelebrate = currentDate.getYear() - birthDate.plusDays(7).getYear();
+			LocalDate birthDayDate = birthDate.plusYears(ageToCelebrate);
+			long daysLeftToBDay = ChronoUnit.DAYS.between(currentDate, birthDayDate);
+			
+			// build the info string..
+			String daysLeftFormat = daysLeftToBDay != 0 ? "in %d days" : "in %d days (TODAY)";
+			String bdayInfo = 
+					  entry.getPerson().getFullName() 
+					+ ": " + ageToCelebrate 
+					+ " years, " 
+					+ String.format(daysLeftFormat, daysLeftToBDay);
+			System.out.println(bdayInfo);
+			personsWithBirthDaySoon.add(bdayInfo);
+		}
+		
+		listViewBirthdays.getItems().addAll(personsWithBirthDaySoon);
+		
+		
+	}
+	
+	
+	private List<AddressBookEntry> getAllEntriesWithBirthDaysWithinAWeek(){
+		LocalDate yesterday = LocalDate.now().minus(1, ChronoUnit.DAYS);
+		LocalDate cutoff = yesterday.plus(9, ChronoUnit.DAYS); // one day added to each "side" to fit methods below
+		// generate the predicate to filter out the right entries
+		Predicate<AddressBookEntry> birthdayWithinAWeek = entry -> {
+			LocalDate birthDate = entry.getPerson().getBirthDate();
+			// we want to ignore year for now..
+			int yearsToAdd = LocalDate.now().getYear() - birthDate.getYear();
+			LocalDate thisYearsBirthDayDate = birthDate.plus(yearsToAdd, ChronoUnit.YEARS);
+			// is it within the span? return answer
+			return (thisYearsBirthDayDate.isAfter(yesterday) && thisYearsBirthDayDate.isBefore(cutoff));
+		};
+		
+		return manager.getAllEntriesMatching(birthdayWithinAWeek);
 	}
 	
 	
