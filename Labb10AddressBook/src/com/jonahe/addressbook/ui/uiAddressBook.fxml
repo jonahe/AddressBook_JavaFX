@@ -65,7 +65,7 @@
                         </VBox>
                      </content>
                   </TitledPane>
-                <TitledPane animated="false" prefHeight="367.0" prefWidth="315.0" text="Upcoming birthdays">
+                <TitledPane fx:id="titledPaneBirthdays" animated="false" prefHeight="367.0" prefWidth="315.0" text="Upcoming birthdays">
                      <font>
                         <Font name="Arial Black" size="16.0" />
                      </font>

@@ -62,6 +62,9 @@ public class ControllerAddressBook implements Initializable{
 	@FXML
 	Button btnCreate;
 	
+	// birthdays..
+	@FXML
+	TitledPane titledPaneBirthdays;
 	@FXML
 	ListView<String> listViewBirthdays;
 	
@@ -166,9 +169,12 @@ public class ControllerAddressBook implements Initializable{
 				AddressBookEntry entryToUpdate = listViewContacts.getSelectionModel().getSelectedItem();
 				if(entryToUpdate != null){
 					formHelper.updateEntry(entryToUpdate);
+					// return to viewing whole list  
 					sortEntries(); // order might have to change
 					populatePrimaryListView(); // refresh listview
 					listViewContacts.getSelectionModel().select(entryToUpdate); // reselect the entry
+					onSelectEntry(); // to trigger so that field is no longer editable etc.
+					txtFldSearchContacts.setText(""); // clear
 				} else {
 					System.out.println("Can't save, because no selected entry detected");
 				}
@@ -211,7 +217,6 @@ public class ControllerAddressBook implements Initializable{
 		populateGenderComboBox();
 		preselectContactsView();
 		setSearchChangeListener();
-		setSelectionChangeListener();
 		initializeEntryJavaFXMediator();
 		
 		manager = new AddressManager();
@@ -219,18 +224,22 @@ public class ControllerAddressBook implements Initializable{
 		populatePrimaryListView();
 		
 		bindSearchFieldProperty();
-		populateUpcommingBirthdaysList();
+		// populateUpcommingBirthdaysList();
+		
+		setBirthdayPaneExpandedChangeListener();
 		
 	}
 
 
-	private void setSelectionChangeListener() {
-		//TODO:  this did not work - why?
-//		listViewContacts.selectionModelProperty().addListener((o, oldValue, newValue) -> {
-//			onSelectEntry();
-//		});
+	private void setBirthdayPaneExpandedChangeListener() {
+		titledPaneBirthdays.expandedProperty().addListener( (changed, oldValue, newValue) -> {
+			if(newValue.booleanValue()){
+				populateUpcommingBirthdaysList();
+			}
+		});
 		
 	}
+
 
 	private void bindSearchFieldProperty() {
 		searchFieldEmpty = txtFldSearchContacts.textProperty().isEmpty();
@@ -285,7 +294,7 @@ public class ControllerAddressBook implements Initializable{
 		manager.createEntry(kim, kiInfo);
 		
 		// create random entries..
-		manager.addEntries(AddressBookEntry.createRandomEntries(300));
+		manager.addEntries(AddressBookEntry.createRandomEntries(500));
 		sortEntries();
 	}
 
@@ -366,6 +375,7 @@ public class ControllerAddressBook implements Initializable{
 			personsWithBirthDaySoon.add(bdayInfo);
 		}
 		
+		listViewBirthdays.getItems().clear();
 		listViewBirthdays.getItems().addAll(personsWithBirthDaySoon);
 		
 		
