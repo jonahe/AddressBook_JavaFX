@@ -3,11 +3,14 @@ package com.jonahe.addressbook.app;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.BooleanProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -36,6 +39,9 @@ public class ControllerAddressBook implements Initializable{
 	
 	private AddressManager manager;
 	private EntryJavaFXMediator formHelper;
+	
+	// FX property values  - bound to..
+	private BooleanBinding searchFieldEmpty;
 	
 	
 	// FXML variables
@@ -94,15 +100,23 @@ public class ControllerAddressBook implements Initializable{
 			manager.remove(listViewContacts.getSelectionModel().getSelectedItem());
 			populatePrimaryListView();
 			// if the searchbox had something in it, make the search again
-			String searchQuery = txtFldSearchContacts.getText();
-			if(! searchQuery.equals("")){
+			if(! searchFieldEmpty.get()){
 				// trigger the change listener
-				txtFldSearchContacts.setText("");
-				txtFldSearchContacts.setText(searchQuery);
+				forceSearchUpdate();
 			}
+			// nothing selected now, so clear fields
+			formHelper.clearFields();
+			
 		} // else nothing
 	}
 	
+	private void forceSearchUpdate() {
+		String searchQuery = txtFldSearchContacts.getText();
+		txtFldSearchContacts.setText("");
+		txtFldSearchContacts.setText(searchQuery);
+		
+	}
+
 	@FXML 
 	private void onEdit(ActionEvent event){
 		System.out.println("Edit..");
@@ -110,6 +124,45 @@ public class ControllerAddressBook implements Initializable{
 			AddressBookEntry selectedEntry = listViewContacts.getSelectionModel().getSelectedItem();
 			formHelper.editEntry(selectedEntry);
 		} // else nothing selected -> do nothing
+	}
+	
+	/**
+	 * prepare for entry creation - NOTE: will NOT CREATE new. - see onSave
+	 */
+	@FXML
+	private void onCreateNew(){
+		formHelper.clearFieldsForCreation();
+	}
+	
+	@FXML
+	private void onSave(ActionEvent event){
+		Button clickedBtn = (Button) event.getSource();
+		// see if we're saving a new entry or just saving changes to old one.
+		String btnText = clickedBtn.getText();
+		if(btnText.equals("Save new entry")){
+			try{
+				System.out.println("Trying to create new entry");
+				AddressBookEntry entry = formHelper.createEntryFromFields();
+				manager.add(entry);
+				populatePrimaryListView();
+				formHelper.clearFields();
+				
+			} catch (Exception e){
+				//TODO: handle validation errors
+				e.printStackTrace();
+			}
+		} else if (btnText.equals("Save changes")) {
+			try{
+				//TODO: update info
+				System.out.println("About to save changes");
+				
+			} catch(Exception e) {
+				//TODO: handle validation errors
+				e.printStackTrace();
+			}
+		} else {
+			System.out.println("Button not recognized");
+		}
 	}
 	
 	@FXML
@@ -140,15 +193,31 @@ public class ControllerAddressBook implements Initializable{
 		populateGenderComboBox();
 		preselectContactsView();
 		setSearchChangeListener();
+		setSelectionChangeListener();
 		initializeEntryJavaFXMediator();
 		
 		manager = new AddressManager();
 		createTestPersons();
 		populatePrimaryListView();
+		
+		bindSearchFieldProperty();
 
 		
 	}
 
+
+	private void setSelectionChangeListener() {
+		//TODO:  this did not work - why?
+//		listViewContacts.selectionModelProperty().addListener((o, oldValue, newValue) -> {
+//			onSelectEntry();
+//		});
+		
+	}
+
+	private void bindSearchFieldProperty() {
+		searchFieldEmpty = txtFldSearchContacts.textProperty().isEmpty();
+		
+	}
 
 	private void initializeEntryJavaFXMediator() {
 		formHelper = new EntryJavaFXMediator( 	txtFldFirstName, 
@@ -158,13 +227,16 @@ public class ControllerAddressBook implements Initializable{
 												txtFldPhoneNum, 
 												txtFldStreetName, 
 												txtFldCity, 
-												comboBox_Country);
+												comboBox_Country,
+												btnSaveContact);
 	}
 
 	private void setSearchChangeListener() {
 		txtFldSearchContacts.textProperty().addListener( (textProperty, oldValue, newValue) -> {
 			
-			if(! "".equals(newValue)){ // if user has entered a string to search for
+			// if(! "".equals(newValue)){
+			
+			if(! searchFieldEmpty.get()){ // if user has entered a string to search for
 				// create Predicate that matches those entries that contain the searchField value
 				Predicate<AddressBookEntry> predicateToFilterBy =  entry -> entry.toString().toLowerCase().contains(newValue.toLowerCase());
 				// use that predicate to filter out matching entries, and populate the list with them.
@@ -193,6 +265,10 @@ public class ControllerAddressBook implements Initializable{
 		Person kim = new Person("Kim", "Robinsson", Gender.OTHER, LocalDate.of(1989, 1, 30));
 		ContactInfo kiInfo = new ContactInfo("0730123456", "Sweden", "Gothenburg", "Tredje långgatan 14");
 		manager.createEntry(kim, kiInfo);
+		
+		// create random entries..
+		manager.addAll(AddressBookEntry.createRandomEntries(100));
+		Collections.sort(manager.getAll(), (e1, e2) -> e1.toString().compareTo(e2.toString()));
 	}
 
 	private void populatePrimaryListView() {
@@ -240,6 +316,8 @@ public class ControllerAddressBook implements Initializable{
 		System.out.println("Current country index: " +currentCountryIndex);
 		comboBox_Country.getSelectionModel().select(currentCountryIndex);
 	}
+	
+	
 	
 	
 
