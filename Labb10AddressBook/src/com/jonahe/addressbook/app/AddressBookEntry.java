@@ -10,20 +10,20 @@ public class AddressBookEntry {
 
 	private Person person;
 	private ContactInfo contactInfo;
-	private List<Person> contacts;
+	private List<Long> connectionIDs; // ID numbers of persons
 	
 	public AddressBookEntry(Person person, ContactInfo contactInfo){
 		this.person = person;
 		this.contactInfo = contactInfo;
-		this.contacts = new ArrayList<Person>();
+		this.connectionIDs = new ArrayList<Long>();
 	}
 	
-	public List<Person> getContacts() {
-		return contacts;
+	public List<Long> getConnectionIDs() {
+		return connectionIDs;
 	}
 
-	public void setContacts(List<Person> contacts) {
-		this.contacts = contacts;
+	public void setConnectionIDs(List<Long> connectionIDs) {
+		this.connectionIDs = connectionIDs;
 	}
 
 	public Person getPerson() {
@@ -39,12 +39,20 @@ public class AddressBookEntry {
 		this.contactInfo = address;
 	}
 	
+	public void addConnectionID(Long connectionId){
+		connectionIDs.add(connectionId);
+	}
+	
+	public void removeConnectionID(Long connectionIdToRemove){
+		connectionIDs.remove(connectionIdToRemove);
+	}
+	
 	
 	@Override
 	public String toString(){
 		// fullname 	 city, street
 		String format = "%s - %s, %s";
-		return String.format(format, person.getFullName(), contactInfo.getCity(), contactInfo.getStreet());
+		return String.format(format, person.getFullName(), contactInfo.getCity(), contactInfo.getStreet()) + " " + person.getId();
 	}
 	
 	public static List<AddressBookEntry> createRandomEntries(int numberWanted){

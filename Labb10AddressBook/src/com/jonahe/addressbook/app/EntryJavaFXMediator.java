@@ -8,6 +8,7 @@ import java.util.List;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
 /**
@@ -33,8 +34,11 @@ public class EntryJavaFXMediator {
 	
 	private Button btnSaveContact;
 	
+	ListView<AddressBookEntry> listViewConnections;
+	
 	boolean firstTimeStyling = true;
 	List<TextField> textFields;
+	AddressManager manager;
 	
 	
 	public EntryJavaFXMediator(	TextField txtFldFirstName, 
@@ -45,7 +49,10 @@ public class EntryJavaFXMediator {
 								TextField txtFldStreetName,
 								TextField txtFldCity, 
 								ComboBox<String> comboBox_Country,
-								Button btnSaveContact) {
+								Button btnSaveContact,
+								ListView<AddressBookEntry> listViewConnections,
+								AddressManager manager
+								){
 		
 		
 		this.txtFldFirstName = txtFldFirstName;
@@ -57,6 +64,8 @@ public class EntryJavaFXMediator {
 		this.txtFldCity = txtFldCity;
 		this.comboBox_Country = comboBox_Country;
 		this.btnSaveContact = btnSaveContact;
+		this.listViewConnections = listViewConnections;
+		this.manager = manager;
 		
 		textFields = new ArrayList<TextField>();
 		Collections.addAll(textFields, txtFldFirstName, txtFldLastName, txtFldPhoneNum, txtFldStreetName, txtFldCity);
@@ -85,6 +94,16 @@ public class EntryJavaFXMediator {
 		txtFldStreetName.setText(cInfo.getStreet());
 		txtFldCity.setText(cInfo.getCity());
 		comboBox_Country.setValue(cInfo.getCountry());
+		
+		List<Long> connectionIDs  = entry.getConnectionIDs();
+		List<AddressBookEntry> connectionEntries = manager.getListFromPersonIdList(connectionIDs);
+		
+		// clear first
+		listViewConnections.getItems().clear();
+		listViewConnections.getItems().addAll(connectionEntries);
+		
+		
+		
 
 	}
 	
@@ -121,9 +140,13 @@ public class EntryJavaFXMediator {
 												txtFldStreetName.getText()
 												);
 		
-		return new AddressBookEntry(person, cInfo);
+		AddressBookEntry entry = new AddressBookEntry(person, cInfo);
+		saveContactConnections(entry);
+		
+		return entry;
 	}
 	
+
 	public void updateEntry(AddressBookEntry entryToUpdate){
 		AddressBookEntry tempEntry = createEntryFromFields();
 		Person tempPerson = tempEntry.getPerson();
@@ -142,10 +165,24 @@ public class EntryJavaFXMediator {
 		cInfo.setCity(tempContactInfo.getCity());
 		cInfo.setCountry(tempContactInfo.getCountry());
 		
-		// the field should have all its part updated (excluding the contact connections field..)
+		saveContactConnections(entryToUpdate);
+		
+		// the field should have all its part updated 
+		
 		
 	}
 	
+	private void saveContactConnections(AddressBookEntry receivingEntry) {
+		
+		receivingEntry.getConnectionIDs().clear();
+		
+		for(AddressBookEntry e : listViewConnections.getItems()){
+			Long id = e.getPerson().getId();
+			System.out.println("Saving id " + id);
+			receivingEntry.addConnectionID(id);
+		}
+		
+	}
 	
 	public void clearFields(){
 		txtFldFirstName.setText("");
@@ -159,6 +196,8 @@ public class EntryJavaFXMediator {
 		comboBox_Country.setValue("Sweden");
 		
 		btnSaveContact.setVisible(false);
+		
+		listViewConnections.getItems().clear();
 		
 	}
 	

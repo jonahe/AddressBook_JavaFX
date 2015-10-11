@@ -1,6 +1,5 @@
 package com.jonahe.addressbook.app;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -33,29 +32,6 @@ public class AddressManager extends BasicManager<AddressBookEntry> {
 	}
 	
 	
-//	public void updatePerson( 	Person personToUpdate,
-//								String firstName,
-//								String lastName,
-//								LocalDate birthDate,
-//								Gender gender) {
-//		
-//		personToUpdate.setFirstName(firstName);
-//		personToUpdate.setLastName(lastName);
-//		personToUpdate.setBirthDate(birthDate);
-//		personToUpdate.setGender(gender);
-//	}
-//	
-//	public void updateContactInfo(	ContactInfo contactInfoToUpdate,
-//									String phoneNumber,
-//									String street,
-//									String city,
-//									String country) {
-//		
-//		contactInfoToUpdate.setPhoneNumber(phoneNumber);
-//		contactInfoToUpdate.setStreet(street);
-//		contactInfoToUpdate.setCity(city);
-//		contactInfoToUpdate.setCountry(country);
-//	}
 	
 	/**
 	 * Creates AND adds to entry list
@@ -64,6 +40,17 @@ public class AddressManager extends BasicManager<AddressBookEntry> {
 	 */
 	public void createEntry(Person person, ContactInfo contactInfo){
 		this.addEntry(new AddressBookEntry(person, contactInfo));
+	}
+	
+	
+	public List<AddressBookEntry> getListFromPersonIdList(List<Long> listOfIDs){
+		
+		Predicate<AddressBookEntry> matchesListOfID;
+		matchesListOfID = entry -> {
+			return listOfIDs.contains(entry.getPerson().getId());
+		};
+		
+		return getAllEntriesMatching(matchesListOfID);
 	}
 								
 								

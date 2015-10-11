@@ -21,24 +21,23 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.control.Tooltip;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 
 public class ControllerAddressBook implements Initializable{
-	/*
-	 * Use manager with "current entry". When a entry is selected in the listview, make that the current entry
-	 * then another method (updateView) can get the relevant info from current entry and fill in the
-	 * info in the view
-	 * 
-	 * 
-	 * 
-	 */
 	
 	// regular variables
 	private ArrayList<String> countries;
 	private Gender[] genders = Gender.values();
+	private boolean inEditOrCreationMode;
+	private AddressBookEntry entryBeingEdited;
 	
 	private AddressManager manager;
 	private EntryJavaFXMediator formHelper;
@@ -92,11 +91,80 @@ public class ControllerAddressBook implements Initializable{
 	@FXML
 	Button btnSaveContact;
 	
-	
-	
 	@FXML
+	ListView<AddressBookEntry> listViewConnections;
+	
+	
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		generateCountryList();
+		populateCountryComboBox();
+		populateGenderComboBox();
+		preselectContactsView();
+		setSearchChangeListener();
+
+		manager = new AddressManager();
+		initializeEntryJavaFXMediator();
+		
+		createTestPersons();
+		populatePrimaryListView();
+		
+		bindSearchFieldProperty();
+		
+		setBirthdayPaneExpandedChangeListener();
+		
+		setupContextMenu();
+		
+		listViewConnections.setTooltip(new Tooltip("Right-click on entry in (left) contact list to add/remove"));
+		
+		
+	}
+	
+	
+	private void setupContextMenu() {
+		
+
+		ContextMenu cMenu = new ContextMenu();
+
+		MenuItem mItem1 = new MenuItem("Add to connections");
+		MenuItem mItem2 = new MenuItem("Remove from connections");
+		// define onAction
+		mItem1.setOnAction( e -> onAddPersonToConnections());
+		mItem2.setOnAction( e -> onRemovePersonFromConnections());
+		// add items to menu
+		cMenu.getItems().addAll(mItem1, mItem2);
+		// add menu to list
+		listViewContacts.setContextMenu(cMenu);
+		
+	}
+
+
+	@FXML
+	private void onSelectEntry(MouseEvent event){
+		System.out.println("onSelect with args");
+		if(event.getButton() == MouseButton.PRIMARY){
+			
+			inEditOrCreationMode = false;
+			
+			System.out.println("primary mouse btn");
+			if(listViewContacts.getSelectionModel().getSelectedIndex() != -1){
+				
+				AddressBookEntry selectedEntry = listViewContacts.getSelectionModel().getSelectedItem();
+				formHelper.viewEntry(selectedEntry);
+			} // else nothing selected -> do nothing			
+		} // else we are probably dealing with a secondary mouse button, then contet menu will be displayed
+		
+	}
+	
+	
+	// no args version..
 	private void onSelectEntry(){
+		
+		inEditOrCreationMode = false;
+		
+		System.out.println("onSelect with no args");
 		if(listViewContacts.getSelectionModel().getSelectedIndex() != -1){
+			
 			AddressBookEntry selectedEntry = listViewContacts.getSelectionModel().getSelectedItem();
 			formHelper.viewEntry(selectedEntry);
 		} // else nothing selected -> do nothing
@@ -121,18 +189,19 @@ public class ControllerAddressBook implements Initializable{
 		} // else nothing
 	}
 	
-	private void forceSearchUpdate() {
-		String searchQuery = txtFldSearchContacts.getText();
-		txtFldSearchContacts.setText("");
-		txtFldSearchContacts.setText(searchQuery);
-		
-	}
 
 	@FXML 
 	private void onEdit(ActionEvent event){
+		
+		inEditOrCreationMode = true;
+		
 		System.out.println("Edit..");
 		if(listViewContacts.getSelectionModel().getSelectedIndex() != -1){
 			AddressBookEntry selectedEntry = listViewContacts.getSelectionModel().getSelectedItem();
+			// TODO: stream-line..
+			// set "current entry" - selected entry is not enough, since an entry might be selected
+			// to be added to contact connections 
+			entryBeingEdited = selectedEntry; 
 			formHelper.editEntrySetup(selectedEntry);
 		} // else nothing selected -> do nothing
 	}
@@ -142,6 +211,9 @@ public class ControllerAddressBook implements Initializable{
 	 */
 	@FXML
 	private void onCreateNew(){
+		System.out.println("Creation mode");
+		inEditOrCreationMode = true;
+		
 		formHelper.clearFieldsForCreation();
 	}
 	
@@ -166,7 +238,8 @@ public class ControllerAddressBook implements Initializable{
 		} else if (btnText.equals("Save changes")) {
 			try{
 				//TODO: update info
-				AddressBookEntry entryToUpdate = listViewContacts.getSelectionModel().getSelectedItem();
+				// AddressBookEntry entryToUpdate = listViewContacts.getSelectionModel().getSelectedItem();
+				AddressBookEntry entryToUpdate = entryBeingEdited;
 				if(entryToUpdate != null){
 					formHelper.updateEntry(entryToUpdate);
 					// return to viewing whole list  
@@ -189,14 +262,64 @@ public class ControllerAddressBook implements Initializable{
 		}
 	}
 	
-	@FXML
-	private void onTESTEETSST(){
-		System.out.println("Testing!");
-		LocalDate pickedTime = datePicker.getValue();
-		System.out.println("Picked time: " + pickedTime);
-		datePicker.setValue(LocalDate.of(1980, 01, 01));
+//	@FXML
+//	private void onTESTEETSST(){
+//		System.out.println("Testing!");
+//		LocalDate pickedTime = datePicker.getValue();
+//		System.out.println("Picked time: " + pickedTime);
+//		datePicker.setValue(LocalDate.of(1980, 01, 01));
+//		
+//	}
+	
+	
+	private void onAddPersonToConnections(){
+		System.out.println("add to connections");
+		/*
+		 * check if we're in edit/creation mode.
+		 * check if an entry in contacts is selected
+		 * add person id to list of connections (in the entry we're editing)
+		 * force an update of that listview so that the added person shows up
+		 * 
+		 */
+		
+		if(inEditOrCreationMode){
+			System.out.println("in edit or creation mode!");
+			AddressBookEntry selectedEntry = listViewContacts.getSelectionModel().getSelectedItem();
+			if(selectedEntry != null){
+				// don't add duplicates
+				if(! listViewConnections.getItems().contains(selectedEntry)){					
+					listViewConnections.getItems().add(selectedEntry);
+				}
+				
+			}
+			
+			
+			
+		} else {
+			System.out.println("NOT in edit of creation mode");
+		}
+
 		
 	}
+	
+	private void onRemovePersonFromConnections(){
+		System.out.println("Remove from connections");
+		
+		if(inEditOrCreationMode){
+			System.out.println("in edit or creation mode!");
+			AddressBookEntry selectedEntry = listViewContacts.getSelectionModel().getSelectedItem();
+			if(selectedEntry != null){
+				listViewConnections.getItems().remove(selectedEntry);
+			}
+			
+			
+			
+		} else {
+			System.out.println("NOT in edit of creation mode");
+		}
+	}
+	
+	
 	
 	private void generateCountryList(){
 		countries = new ArrayList<String>();
@@ -210,23 +333,10 @@ public class ControllerAddressBook implements Initializable{
 		// countries.forEach(System.out::println);
 	}
 
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		generateCountryList();
-		populateCountryComboBox();
-		populateGenderComboBox();
-		preselectContactsView();
-		setSearchChangeListener();
-		initializeEntryJavaFXMediator();
-		
-		manager = new AddressManager();
-		createTestPersons();
-		populatePrimaryListView();
-		
-		bindSearchFieldProperty();
-		// populateUpcommingBirthdaysList();
-		
-		setBirthdayPaneExpandedChangeListener();
+	private void forceSearchUpdate() {
+		String searchQuery = txtFldSearchContacts.getText();
+		txtFldSearchContacts.setText("");
+		txtFldSearchContacts.setText(searchQuery);
 		
 	}
 
@@ -255,7 +365,10 @@ public class ControllerAddressBook implements Initializable{
 												txtFldStreetName, 
 												txtFldCity, 
 												comboBox_Country,
-												btnSaveContact);
+												btnSaveContact,
+												listViewConnections,
+												manager
+				);
 	}
 
 	private void setSearchChangeListener() {
@@ -277,6 +390,7 @@ public class ControllerAddressBook implements Initializable{
 	}
 
 	private void createTestPersons() {
+		
 		Person kurt = new Person("Kurt", "Åkesson", Gender.MALE, LocalDate.of(1982, 11, 24));
 		ContactInfo erInfo = new ContactInfo("0700123456", "Sweden", "Gothenburg", "Tredje långgatan 11");
 		manager.createEntry(kurt, erInfo);
@@ -295,6 +409,21 @@ public class ControllerAddressBook implements Initializable{
 		
 		// create random entries..
 		manager.addEntries(AddressBookEntry.createRandomEntries(500));
+		
+		
+		
+		// add Apan as connection to everyone
+		
+		Person apan = new Person("Apan", "Apansson", Gender.MALE, LocalDate.of(0, 1, 1));
+		ContactInfo apInfo = new ContactInfo("0700123456", "Sweden", "Gothenburg", "Tredje långgatan 11");
+		
+		Long apanID = apan.getId();
+		manager.getEntries().forEach( entry -> {
+			entry.addConnectionID(apanID);
+		});
+		
+		// add apan..
+		manager.createEntry(apan, apInfo);
 		sortEntries();
 	}
 
