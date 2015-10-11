@@ -33,29 +33,29 @@ public class AddressManager extends BasicManager<AddressBookEntry> {
 	}
 	
 	
-	public void updatePerson( 	Person personToUpdate,
-								String firstName,
-								String lastName,
-								LocalDate birthDate,
-								Gender gender) {
-		
-		personToUpdate.setFirstName(firstName);
-		personToUpdate.setLastName(lastName);
-		personToUpdate.setBirthDate(birthDate);
-		personToUpdate.setGender(gender);
-	}
-	
-	public void updateContactInfo(	ContactInfo contactInfoToUpdate,
-									String phoneNumber,
-									String street,
-									String city,
-									String country) {
-		
-		contactInfoToUpdate.setPhoneNumber(phoneNumber);
-		contactInfoToUpdate.setStreet(street);
-		contactInfoToUpdate.setCity(city);
-		contactInfoToUpdate.setCountry(country);
-	}
+//	public void updatePerson( 	Person personToUpdate,
+//								String firstName,
+//								String lastName,
+//								LocalDate birthDate,
+//								Gender gender) {
+//		
+//		personToUpdate.setFirstName(firstName);
+//		personToUpdate.setLastName(lastName);
+//		personToUpdate.setBirthDate(birthDate);
+//		personToUpdate.setGender(gender);
+//	}
+//	
+//	public void updateContactInfo(	ContactInfo contactInfoToUpdate,
+//									String phoneNumber,
+//									String street,
+//									String city,
+//									String country) {
+//		
+//		contactInfoToUpdate.setPhoneNumber(phoneNumber);
+//		contactInfoToUpdate.setStreet(street);
+//		contactInfoToUpdate.setCity(city);
+//		contactInfoToUpdate.setCountry(country);
+//	}
 	
 	/**
 	 * Creates AND adds to entry list

@@ -11,7 +11,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 
 /**
- * 
+ * Creates objects from JavaFX fields and more.
  * Making the transition between JavaFX objects and AddressBookEntry easier (both ways)
  *
  */
