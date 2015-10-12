@@ -1,6 +1,8 @@
 package com.jonahe.addressbook.app;
 
-public class ContactInfo {
+import java.io.Serializable;
+
+public class ContactInfo implements Serializable{
 	private String country;
 	private String city;
 	private String street;
@@ -8,10 +10,10 @@ public class ContactInfo {
 	
 	
 	public ContactInfo(String phoneNumber, String country, String city, String street) {
-		this.phoneNumber = phoneNumber;
+		setPhoneNumber(phoneNumber);
 		this.country = country;
-		this.city = city;
-		this.street = street;
+		setCity(city);
+		setStreet(street);
 		
 	}
 	
@@ -22,6 +24,7 @@ public class ContactInfo {
 
 
 	public void setPhoneNumber(String phoneNumber) {
+		if("".equals(phoneNumber)) phoneNumber = "000-000 00 00";
 		this.phoneNumber = phoneNumber;
 	}
 
@@ -41,12 +44,14 @@ public class ContactInfo {
 	}
 
 	public void setCity(String city) {
+		if("".equals(city)) city = "Unknown";
 		this.city = city;
 	}
 	public String getStreet() {
 		return street;
 	}
 	public void setStreet(String street) {
+		if("".equals(street)) street = "Unknown";
 		this.street = street;
 	}
 

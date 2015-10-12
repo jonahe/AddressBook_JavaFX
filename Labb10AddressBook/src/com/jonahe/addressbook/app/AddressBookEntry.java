@@ -1,12 +1,13 @@
 package com.jonahe.addressbook.app;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-public class AddressBookEntry {
+public class AddressBookEntry implements Serializable {
 
 	private Person person;
 	private ContactInfo contactInfo;
@@ -35,8 +36,8 @@ public class AddressBookEntry {
 	public ContactInfo getContactInfo() {
 		return contactInfo;
 	}
-	public void setContactInfo(ContactInfo address) {
-		this.contactInfo = address;
+	public void setContactInfo(ContactInfo contactInfo) {
+		this.contactInfo = contactInfo;
 	}
 	
 	public void addConnectionID(Long connectionId){
@@ -52,7 +53,7 @@ public class AddressBookEntry {
 	public String toString(){
 		// fullname 	 city, street
 		String format = "%s - %s, %s";
-		return String.format(format, person.getFullName(), contactInfo.getCity(), contactInfo.getStreet()) + " " + person.getId();
+		return String.format(format, person.getFullName(), contactInfo.getCity(), contactInfo.getStreet());
 	}
 	
 	public static List<AddressBookEntry> createRandomEntries(int numberWanted){

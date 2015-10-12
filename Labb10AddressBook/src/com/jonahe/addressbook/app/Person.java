@@ -1,9 +1,10 @@
 package com.jonahe.addressbook.app;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
 
-public class Person {
+public class Person implements Serializable {
 	
 	private long id;
 	
@@ -17,12 +18,11 @@ public class Person {
 					Gender gender,
 					LocalDate birthDate 
 					) {
-		this.firstName = firstName;
-		this.lastName = lastName;
+		setFirstName(firstName);
+		setLastName(lastName);
 		this.gender = gender;
 		this.birthDate = birthDate;
 		id = generateUniqueID();
-		System.out.println(id);
 	}
 	
 	
@@ -42,6 +42,7 @@ public class Person {
 
 
 	public void setFirstName(String firstName) {
+		if("".equals(firstName)) firstName = "Unknown";
 		this.firstName = firstName;
 	}
 
@@ -52,6 +53,7 @@ public class Person {
 
 
 	public void setLastName(String lastName) {
+		if("".equals(lastName)) lastName = "Unknown";
 		this.lastName = lastName;
 	}
 

@@ -1,5 +1,6 @@
 package com.jonahe.addressbook.app;
 
+import java.io.File;
 import java.net.URL;
 import java.time.LocalDate;
 
@@ -107,10 +108,11 @@ public class ControllerAddressBook implements Initializable{
 		preselectContactsView();
 		setSearchChangeListener();
 
-		manager = new AddressManager();
+		manager = new AddressManager(new File("src//saveFile.txt"));
+		manager.loadSavedEntries();
 		initializeEntryJavaFXMediator();
 		
-		createTestPersons();
+		// createTestPersons(); // adds 200 random test persons   <--  not wanted if loading from file - clears loaded files
 		addListViewContactsListener();
 		populatePrimaryListView();
 		
@@ -120,13 +122,22 @@ public class ControllerAddressBook implements Initializable{
 		
 		setupContextMenu();
 		
-		listViewConnections.setTooltip(new Tooltip("Right-click on entry in (left) contact list to add/remove"));
+		listViewConnections.setTooltip(new Tooltip("Right-click on entry in either list to add/remove"));		
 		
 		
-		
-		
-		
-		
+	}
+	
+	
+	
+	/**
+	 * NOTE: this cannot be called during initialization, as it needs the scene. this is instead called from main, after
+	 * being loaded
+	 */
+	public void setOnCloseRequest(){
+		accordionMain.getScene().getWindow().setOnCloseRequest( event -> {
+			System.out.println("Closing window detected. Saving all entries!");
+			manager.saveAll();
+		});
 	}
 
 
@@ -446,6 +457,8 @@ public class ControllerAddressBook implements Initializable{
 
 	private void createTestPersons() {
 		
+		manager.getEntries().clear();
+		
 		Person kurt = new Person("Kurt", "Åkesson", Gender.MALE, LocalDate.of(1982, 11, 24));
 		ContactInfo erInfo = new ContactInfo("0700123456", "Sweden", "Gothenburg", "Tredje långgatan 11");
 		manager.createEntry(kurt, erInfo);
@@ -463,7 +476,7 @@ public class ControllerAddressBook implements Initializable{
 		manager.createEntry(kim, kiInfo);
 		
 		// create random entries..
-		manager.addEntries(AddressBookEntry.createRandomEntries(100));
+		manager.addEntries(AddressBookEntry.createRandomEntries(195));
 		
 		
 		
@@ -495,6 +508,10 @@ public class ControllerAddressBook implements Initializable{
 		
 	}
 	
+	/**
+	 * Eg for populating list with search results
+	 * @param entries
+	 */
 	private void populatePrimaryListView(List<AddressBookEntry> entries) {
 		listViewContacts.getItems().clear();
 		listViewContacts.getItems().addAll(entries);
@@ -503,7 +520,6 @@ public class ControllerAddressBook implements Initializable{
 	
 	private void preselectContactsView() {
 		//preselect Contact view in accordion
-		System.out.println("Accordion main" + accordionMain);
 		TitledPane contactPane = accordionMain.getPanes().get(0);
 		accordionMain.setExpandedPane(contactPane);
 		

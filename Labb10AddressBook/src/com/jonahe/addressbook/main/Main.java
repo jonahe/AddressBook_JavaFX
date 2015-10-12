@@ -1,6 +1,8 @@
 package com.jonahe.addressbook.main;
 
 
+import com.jonahe.addressbook.app.ControllerAddressBook;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,7 +19,8 @@ public class Main extends Application{
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		Parent root = FXMLLoader.load(getClass().getResource("/com/jonahe/addressbook/ui/uiAddressBook.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/jonahe/addressbook/ui/uiAddressBook.fxml"));
+		Parent root = loader.load();
 		// root.getStylesheets().add("/com/jonahe/addressbook/ui/uiAddressBook.css");
 		Scene scene = new Scene(root);
 		
@@ -26,6 +29,10 @@ public class Main extends Application{
 		scene.getStylesheets().add("/com/jonahe/addressbook/ui/uiAddressBook.css");
 		primaryStage.setTitle("Address book");
 		primaryStage.show();
+		ControllerAddressBook controller = loader.getController();
+		controller.setOnCloseRequest();
+		
+		
 		
 		
 	}
