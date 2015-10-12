@@ -14,6 +14,7 @@ import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
 import javafx.beans.binding.BooleanBinding;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,6 +24,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
@@ -53,6 +55,8 @@ public class ControllerAddressBook implements Initializable{
 	TextField txtFldSearchContacts;
 	@FXML
 	ListView<AddressBookEntry> listViewContacts;
+	@FXML
+	Label labelNumberOfResults;
 	// main buttons
 	@FXML
 	Button btnEdit;
@@ -107,6 +111,7 @@ public class ControllerAddressBook implements Initializable{
 		initializeEntryJavaFXMediator();
 		
 		createTestPersons();
+		addListViewContactsListener();
 		populatePrimaryListView();
 		
 		bindSearchFieldProperty();
@@ -118,6 +123,24 @@ public class ControllerAddressBook implements Initializable{
 		listViewConnections.setTooltip(new Tooltip("Right-click on entry in (left) contact list to add/remove"));
 		
 		
+		
+		
+		
+		
+	}
+
+
+	private void addListViewContactsListener() {
+		listViewContacts.itemsProperty().get().addListener( new ListChangeListener<AddressBookEntry>() {
+
+			@Override
+			public void onChanged(javafx.collections.ListChangeListener.Change<? extends AddressBookEntry> c) {
+				System.out.println("Change detected in list!");
+				int size  = listViewContacts.getItems().size();
+				String contactOrContacts  = size == 1 ? "contact" : "contacts";
+				labelNumberOfResults.setText("Listing " + size + " " + contactOrContacts);
+			}
+		});
 	}
 	
 	
@@ -135,6 +158,27 @@ public class ControllerAddressBook implements Initializable{
 		cMenu.getItems().addAll(mItem1, mItem2);
 		// add menu to list
 		listViewContacts.setContextMenu(cMenu);
+		
+		// hide menu if in wrong "mode". 
+		cMenu.focusedProperty().addListener(change -> {
+			System.out.println("Context menu focused");
+			if(!inEditOrCreationMode){
+				cMenu.getItems().forEach(item -> item.setVisible(false));
+			} else {
+				if(listViewConnections.isFocused()){
+					cMenu.getItems().get(0).setVisible(false);
+					cMenu.getItems().get(1).setVisible(true);
+				} else {
+					cMenu.getItems().forEach(item -> item.setVisible(true));					
+				}
+				
+				
+			}
+		});
+		
+		listViewConnections.setContextMenu(cMenu);
+		listViewConnections.isFocused();
+		
 		
 	}
 
@@ -307,9 +351,20 @@ public class ControllerAddressBook implements Initializable{
 		
 		if(inEditOrCreationMode){
 			System.out.println("in edit or creation mode!");
-			AddressBookEntry selectedEntry = listViewContacts.getSelectionModel().getSelectedItem();
-			if(selectedEntry != null){
-				listViewConnections.getItems().remove(selectedEntry);
+			
+			// a selection can be in the contacts list, or in the connections list
+			if(listViewConnections.isFocused()){
+				AddressBookEntry selectedE = listViewConnections.getSelectionModel().getSelectedItem();
+				if(selectedE != null){
+					listViewConnections.getItems().remove(selectedE);
+				}					
+			} else if (listViewContacts.isFocused()){
+				AddressBookEntry selectedEntry = listViewContacts.getSelectionModel().getSelectedItem();
+				if(selectedEntry != null){
+					listViewConnections.getItems().remove(selectedEntry);
+				}
+			} else {
+				// nothing
 			}
 			
 			
@@ -408,7 +463,7 @@ public class ControllerAddressBook implements Initializable{
 		manager.createEntry(kim, kiInfo);
 		
 		// create random entries..
-		manager.addEntries(AddressBookEntry.createRandomEntries(500));
+		manager.addEntries(AddressBookEntry.createRandomEntries(100));
 		
 		
 		
