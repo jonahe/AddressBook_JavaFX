@@ -52,8 +52,8 @@ public class AddressBookEntry implements Serializable {
 	@Override
 	public String toString(){
 		// fullname 	 city, street
-		String format = "%s - %s, %s";
-		return String.format(format, person.getFullName(), contactInfo.getCity(), contactInfo.getStreet());
+		String format = "%s - %s, %s (%s)";
+		return String.format(format, person.getFullName(), contactInfo.getCity(), contactInfo.getStreet(), contactInfo.getCountry());
 	}
 	
 	public static List<AddressBookEntry> createRandomEntries(int numberWanted){

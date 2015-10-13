@@ -443,10 +443,18 @@ public class ControllerAddressBook implements Initializable{
 			// if(! "".equals(newValue)){
 			
 			if(! searchFieldEmpty.get()){ // if user has entered a string to search for
-				// create Predicate that matches those entries that contain the searchField value
-				Predicate<AddressBookEntry> predicateToFilterBy =  entry -> entry.toString().toLowerCase().contains(newValue.toLowerCase());
+				// create Predicate that matches those entries that contain the searchField values
+				String[] searchWords = newValue.split(" ");
+				Predicate<AddressBookEntry>[] predicates = (Predicate<AddressBookEntry>[]) new Predicate[searchWords.length];
+				for(int i = 0; i < searchWords.length; i++){
+					String searchWord = searchWords[i];
+					System.out.println(searchWord);
+					Predicate<AddressBookEntry> predicateToFilterBy =  entry -> entry.toString().toLowerCase().contains(searchWord.toLowerCase());
+					
+					predicates[i] = predicateToFilterBy;
+				}
 				// use that predicate to filter out matching entries, and populate the list with them.
-				List<AddressBookEntry> matchingEntries = manager.getAllEntriesMatching(predicateToFilterBy);
+				List<AddressBookEntry> matchingEntries = manager.getAllEntriesMatching(predicates);
 				populatePrimaryListView(matchingEntries);
 			} else {
 				// no search string  -> show all

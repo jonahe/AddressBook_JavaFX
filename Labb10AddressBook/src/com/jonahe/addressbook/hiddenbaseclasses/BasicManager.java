@@ -43,9 +43,34 @@ public abstract class BasicManager<T> {
 	 * @param predicateToFilterBy
 	 * @return ArrayList of matches (may be empty)
 	 */
-	protected ArrayList<T> getAllMatching(Predicate<? super T> predicateToFilterBy){
+	protected final ArrayList<T> getAllMatching(Predicate<? super T> predicateToFilterBy){
+
 		return objects.stream()
 				.filter(predicateToFilterBy)
+				.collect(Collectors.toCollection(ArrayList<T>::new));
+	}
+	
+	/**
+	 * Get all objects that match the predicate 
+	 * @param predicateToFilterBy
+	 * @return ArrayList of matches (may be empty)
+	 */
+	@SafeVarargs
+	protected final ArrayList<T> getAllMatching(Predicate<T>... predicatesToFilterBy){
+		if(predicatesToFilterBy.length == 0){
+			return (ArrayList<T>) objects; // no predicates -> everything goes
+		}
+		// else combine the predicates into one, then filter
+		Predicate<T> combinedPredicate = predicatesToFilterBy[0];
+		for(int i = 1; i < predicatesToFilterBy.length; i++){
+			System.out.println("hej från varargs");
+			Predicate<T> pred = predicatesToFilterBy[i];
+			combinedPredicate = combinedPredicate.and(pred);
+		}
+		
+
+		return objects.stream()
+				.filter(combinedPredicate)
 				.collect(Collectors.toCollection(ArrayList<T>::new));
 	}
 	

@@ -44,6 +44,11 @@ public class AddressManager extends BasicManager<AddressBookEntry> {
 		return super.getAllMatching(predicateToFilterBy);
 	}
 	
+	@SafeVarargs
+	public final ArrayList<AddressBookEntry> getAllEntriesMatching(Predicate<AddressBookEntry>... predicatesToFilterBy) {
+		return super.getAllMatching(predicatesToFilterBy);
+	}
+	
 	
 	
 	/**
