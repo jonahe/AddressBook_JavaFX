@@ -14,18 +14,21 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
+import javafx.animation.FadeTransition;
 import javafx.beans.binding.BooleanBinding;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
@@ -33,6 +36,7 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Duration;
 
 public class ControllerAddressBook implements Initializable{
 	
@@ -317,14 +321,6 @@ public class ControllerAddressBook implements Initializable{
 		}
 	}
 	
-//	@FXML
-//	private void onTESTEETSST(){
-//		System.out.println("Testing!");
-//		LocalDate pickedTime = datePicker.getValue();
-//		System.out.println("Picked time: " + pickedTime);
-//		datePicker.setValue(LocalDate.of(1980, 01, 01));
-//		
-//	}
 	
 	
 	private void onAddPersonToConnections(){
@@ -384,7 +380,6 @@ public class ControllerAddressBook implements Initializable{
 			System.out.println("NOT in edit of creation mode");
 		}
 	}
-	
 	
 	
 	private void generateCountryList(){
@@ -467,8 +462,8 @@ public class ControllerAddressBook implements Initializable{
 		
 		manager.getEntries().clear();
 		
-		Person kurt = new Person("Kurt", "Åkesson", Gender.MALE, LocalDate.of(1982, 11, 24));
-		ContactInfo erInfo = new ContactInfo("0700123456", "Sweden", "Gothenburg", "Tredje långgatan 11");
+		Person kurt = new Person("Kurt", "ï¿½kesson", Gender.MALE, LocalDate.of(1982, 11, 24));
+		ContactInfo erInfo = new ContactInfo("0700123456", "Sweden", "Gothenburg", "Tredje lï¿½nggatan 11");
 		manager.createEntry(kurt, erInfo);
 		
 		Person emma = new Person("Emma", "Karlsson", Gender.FEMALE, LocalDate.of(1986, 2, 15));
@@ -476,11 +471,11 @@ public class ControllerAddressBook implements Initializable{
 		manager.createEntry(emma, emInfo);
 		
 		Person filip = new Person("Filip", "Gustavsson", Gender.MALE, LocalDate.of(1975, 8, 4));
-		ContactInfo fiInfo = new ContactInfo("0720123456", "Sweden", "Gothenburg", "Tredje långgatan 13");
+		ContactInfo fiInfo = new ContactInfo("0720123456", "Sweden", "Gothenburg", "Tredje lï¿½nggatan 13");
 		manager.createEntry(filip, fiInfo);
 		
 		Person kim = new Person("Kim", "Robinsson", Gender.OTHER, LocalDate.of(1989, 1, 30));
-		ContactInfo kiInfo = new ContactInfo("0730123456", "Sweden", "Gothenburg", "Tredje långgatan 14");
+		ContactInfo kiInfo = new ContactInfo("0730123456", "Sweden", "Gothenburg", "Tredje lï¿½nggatan 14");
 		manager.createEntry(kim, kiInfo);
 		
 		// create random entries..
@@ -491,7 +486,7 @@ public class ControllerAddressBook implements Initializable{
 		// add Apan as connection to everyone
 		
 		Person apan = new Person("Apan", "Apansson", Gender.MALE, LocalDate.of(0, 1, 1));
-		ContactInfo apInfo = new ContactInfo("0700123456", "Sweden", "Gothenburg", "Tredje långgatan 11");
+		ContactInfo apInfo = new ContactInfo("0700123456", "Sweden", "Gothenburg", "Tredje lï¿½nggatan 11");
 		
 		Long apanID = apan.getId();
 		manager.getEntries().forEach( entry -> {
