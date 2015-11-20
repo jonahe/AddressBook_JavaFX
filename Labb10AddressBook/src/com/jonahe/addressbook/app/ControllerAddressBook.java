@@ -41,6 +41,10 @@ import javafx.util.Duration;
 public class ControllerAddressBook implements Initializable{
 	
 	// regular variables
+	
+	private static File maleImagePath = new File("img-and-icons//male.jpg");
+	private static File femaleImagePath = new File("img-and-icons//female.png");
+	
 	private ArrayList<String> countries;
 	private Gender[] genders = Gender.values();
 	private boolean inEditOrCreationMode;
@@ -118,6 +122,11 @@ public class ControllerAddressBook implements Initializable{
 		
 		// createTestPersons(); // adds 200 random test persons   <--  not wanted if loading from file - clears loaded files
 		addListViewContactsListener();
+		// new stuff
+		setDefaultCellFactoryForPrimaryListView();
+		
+		
+		
 		populatePrimaryListView();
 		
 		bindSearchFieldProperty();
@@ -126,7 +135,9 @@ public class ControllerAddressBook implements Initializable{
 		
 		setupContextMenu();
 		
-		listViewConnections.setTooltip(new Tooltip("Right-click on entry in either list to add/remove"));		
+		listViewConnections.setTooltip(new Tooltip("Right-click on entry in either list to add/remove"));
+		// new stuff
+		listViewConnections.setCellFactory(listView -> new CustomListCell(maleImagePath, femaleImagePath));
 		
 		
 	}
@@ -509,6 +520,10 @@ public class ControllerAddressBook implements Initializable{
 		listViewContacts.getItems().clear();
 		listViewContacts.getItems().addAll(allEntries);
 		
+	}
+	
+	private void setDefaultCellFactoryForPrimaryListView() {
+		listViewContacts.setCellFactory(listview -> new CustomListCell(maleImagePath, femaleImagePath));
 	}
 	
 	/**

@@ -32,9 +32,6 @@ public class Main extends Application{
 		ControllerAddressBook controller = loader.getController();
 		controller.setOnCloseRequest();
 		
-		
-		
-		
 	}
 	
 }
