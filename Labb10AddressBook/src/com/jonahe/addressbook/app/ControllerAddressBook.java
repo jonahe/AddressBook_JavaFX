@@ -46,6 +46,8 @@ public class ControllerAddressBook implements Initializable{
 	private static File maleImagePath = new File("img-and-icons//male.jpg");
 	private static File femaleImagePath = new File("img-and-icons//female.png");
 	private static File editImagePath = new File("img-and-icons//edit_property.png");
+	private static File addContactImagePath = new File("img-and-icons//add_user.png");
+	private static File removeContactImagePath = new File("img-and-icons//remove.png");
 	
 	private ArrayList<String> countries;
 	private Gender[] genders = Gender.values();
@@ -140,7 +142,7 @@ public class ControllerAddressBook implements Initializable{
 		
 		listViewConnections.setTooltip(new Tooltip("Right-click on entry in either list to add/remove"));
 		// new stuff
-		listViewConnections.setCellFactory(listView -> new CustomListCell(maleImagePath, femaleImagePath, editImagePath, this));
+		listViewConnections.setCellFactory(listView -> new CustomListCell(maleImagePath, femaleImagePath, editImagePath, addContactImagePath, removeContactImagePath, this, false));
 		
 		inEditOrCreationModeProperty.addListener((event, old, newVal) -> System.out.println("changed edit mode")); 
 		
@@ -344,7 +346,7 @@ public class ControllerAddressBook implements Initializable{
 	
 	
 	
-	private void onAddPersonToConnections(){
+	public void onAddPersonToConnections(){
 		System.out.println("add to connections");
 		/*
 		 * check if we're in edit/creation mode.
@@ -374,7 +376,7 @@ public class ControllerAddressBook implements Initializable{
 		
 	}
 	
-	private void onRemovePersonFromConnections(){
+	public void onRemovePersonFromConnections(){
 		System.out.println("Remove from connections");
 		
 		if(inEditOrCreationModeProperty.get()){
@@ -533,7 +535,7 @@ public class ControllerAddressBook implements Initializable{
 	}
 	
 	private void setDefaultCellFactoryForPrimaryListView() {
-		listViewContacts.setCellFactory(listview -> new CustomListCell(maleImagePath, femaleImagePath, editImagePath, this));
+		listViewContacts.setCellFactory(listview -> new CustomListCell(maleImagePath, femaleImagePath, editImagePath, addContactImagePath, removeContactImagePath, this, true));
 	}
 	
 	/**

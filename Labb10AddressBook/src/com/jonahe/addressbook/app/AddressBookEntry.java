@@ -104,11 +104,11 @@ public class AddressBookEntry implements Serializable {
 				"Peter,Adam,Anna,Beatrice,Cecilia,Calle,Kajsa,Karin,Kerstin,"
 				+ "Kicki,Freja,Fredrik,Frida,Per,Olof,Malin,Jenny,Birgit,Britt,"
 				+ "Viktor,Jonas,Alexandra,Kim,Robin,Stina,Bengt,Johan,George,Micke,"
-				+ "Sten,Ove,Katta,Emma,Frans,Frank,Björn,Eva,Irma,Erik,Josef,Karl,"
+				+ "Sten,Ove,Katta,Emma,Frans,Frank,Bjï¿½rn,Eva,Irma,Erik,Josef,Karl,"
 				+ "Lisa,Kasper,Billy,Leija,Simba,Arne,Benjamin,Markus,Molle,Bambi,Robert";
 		String[] sampleNames = firstNames.split(",");
 		String[] sampleLastNameBeginnings = "Stor,Sten,Vi,Ranne,Ny,Ahl,Alm,Dahl,Setter,Ek,Holm,Vetter,Halm,".split(",");
-		String[] sampleLastNameEndings = "qvist,berg,bäck,ström,kvist,fors,hammar".split(",");
+		String[] sampleLastNameEndings = "qvist,berg,bï¿½ck,strï¿½m,kvist,fors,hammar".split(",");
 		
 		Gender[] sampleGenders = Gender.values();
 		
