@@ -1,6 +1,7 @@
 package com.jonahe.addressbook.app;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
 
@@ -15,6 +16,7 @@ import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
 import javafx.animation.FadeTransition;
+import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ListChangeListener;
@@ -24,6 +26,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Accordion;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
@@ -35,6 +39,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
@@ -48,6 +54,14 @@ public class ControllerAddressBook implements Initializable{
 	private static File editImagePath = new File("img-and-icons//edit_property.png");
 	private static File addContactImagePath = new File("img-and-icons//add_user.png");
 	private static File removeContactImagePath = new File("img-and-icons//remove.png");
+	
+	private static File saveButtonImagePath = new File("img-and-icons//save.png");
+	private static File lockedImagePath = new File("img-and-icons//lock.png");
+	private static File searchImagePath = new File("img-and-icons//search.png");
+	private static File deleteImagePath = new File("img-and-icons//trash.png");
+	private static File saveConfirmationImagePath = new File("img-and-icons//confirm_save.png");
+	
+	
 	
 	private ArrayList<String> countries;
 	private Gender[] genders = Gender.values();
@@ -67,6 +81,8 @@ public class ControllerAddressBook implements Initializable{
 	Accordion accordionMain;
 	@FXML
 	TextField txtFldSearchContacts;
+	@FXML
+	ImageView searchImgView;
 	@FXML
 	ListView<AddressBookEntry> listViewContacts;
 	@FXML
@@ -131,7 +147,6 @@ public class ControllerAddressBook implements Initializable{
 		setDefaultCellFactoryForPrimaryListView();
 		
 		
-		
 		populatePrimaryListView();
 		
 		bindSearchFieldProperty();
@@ -140,11 +155,64 @@ public class ControllerAddressBook implements Initializable{
 		
 		setupContextMenu();
 		
-		listViewConnections.setTooltip(new Tooltip("Right-click on entry in either list to add/remove"));
 		// new stuff
+		
+		listViewConnections.setTooltip(new Tooltip("Right-click on entry in either list to add/remove"));
 		listViewConnections.setCellFactory(listView -> new CustomListCell(maleImagePath, femaleImagePath, editImagePath, addContactImagePath, removeContactImagePath, this, false));
 		
 		inEditOrCreationModeProperty.addListener((event, old, newVal) -> System.out.println("changed edit mode")); 
+		
+		
+		//TODO: extract methods
+		
+		ImageView saveImage = new ImageView();
+		saveImage.setFitHeight(20);
+		saveImage.setFitWidth(20);
+		saveImage.setPreserveRatio(true);
+		try {
+			saveImage.setImage(new Image(saveButtonImagePath.toURI().toURL().toString()));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		btnSaveContact.setGraphic(saveImage);
+		
+		
+		ImageView deleteImage = new ImageView();
+		deleteImage.setFitHeight(30);
+		deleteImage.setFitWidth(30);
+		deleteImage.setPreserveRatio(true);
+		try {
+			deleteImage.setImage(new Image(deleteImagePath.toURI().toURL().toString()));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		btnDelete.setGraphic(deleteImage);
+		
+		
+		try {
+			searchImgView.setImage(new Image(searchImagePath.toURI().toURL().toString()));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		// don't forget to save
+		btnSaveContact.setTooltip(new Tooltip("Don't forget to save changes!"));
+		inEditOrCreationModeProperty.addListener((event) -> {
+			if(inEditOrCreationModeProperty.get()) {
+				btnSaveContact.getTooltip().show(btnSaveContact.getScene().getWindow());
+				try {
+					Thread.sleep(200);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				btnSaveContact.getTooltip().hide();
+			}
+		});
 		
 	}
 	
@@ -341,7 +409,29 @@ public class ControllerAddressBook implements Initializable{
 			}
 		} else {
 			System.out.println("Button not recognized");
+			return;
 		}
+		
+		
+		//TODO: save confirmation tooltip
+		ImageView saveConfirmImage = new ImageView();
+		saveConfirmImage.setFitHeight(40);
+		saveConfirmImage.setFitWidth(40);
+		saveConfirmImage.setPreserveRatio(true);
+		try {
+			saveConfirmImage.setImage(new Image(saveConfirmationImagePath.toURI().toURL().toString()));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//		Alert alert = new Alert(AlertType.NONE);
+//		alert.setGraphic(saveConfirmImage);
+//		alert.show();
+		
+		saveConfirmImage.setVisible(true);
+
+		
+		
 	}
 	
 	

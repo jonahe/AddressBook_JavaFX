@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
@@ -33,6 +34,7 @@
                                        </font>
                                     </Label>
                                     <TextField fx:id="txtFldSearchContacts" prefHeight="29.0" prefWidth="225.0" />
+                                    <ImageView fx:id="searchImgView" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
                                  </children>
                                  <VBox.margin>
                                     <Insets right="5.0" />

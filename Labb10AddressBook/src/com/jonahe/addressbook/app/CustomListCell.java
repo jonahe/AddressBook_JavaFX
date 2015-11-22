@@ -51,8 +51,8 @@ public class CustomListCell extends ListCell<AddressBookEntry> {
 		System.out.println(maleImagePath.exists());
 
 
-		imageView.setFitHeight(70);
-		imageView.setFitWidth(70);
+		imageView.setFitHeight(60);
+		imageView.setFitWidth(60);
 		imageView.setPreserveRatio(true);
 	}
 
@@ -86,6 +86,8 @@ public class CustomListCell extends ListCell<AddressBookEntry> {
 			HBox cellGraphic = new HBox();
 			cellGraphic.setBackground(new Background(new BackgroundFill(shadePaint, null, new Insets(-10))));
 			VBox vboxPersonDetails = new VBox(new Label(person.getFullName()), new Label(entry.getContactInfo().getPhoneNumber()));
+			vboxPersonDetails.setAlignment(Pos.CENTER_LEFT);
+			vboxPersonDetails.setPadding(new Insets(0,3,0,5));
 			vboxPersonDetails.setPrefWidth(150);
 //			Button editButton = new Button("Edit");
 //			try {
@@ -109,7 +111,7 @@ public class CustomListCell extends ListCell<AddressBookEntry> {
 			setButtonListeners(editButton, addButton, removeButton);
 			
 			VBox optionButtons = new VBox(editButton, addButton, removeButton);
-			optionButtons.setAlignment(Pos.TOP_CENTER);
+			optionButtons.setAlignment(Pos.CENTER_RIGHT);
 			
 			cellGraphic.getChildren().addAll(imageView, vboxPersonDetails, optionButtons);
 			setGraphic(cellGraphic);
@@ -158,6 +160,12 @@ public class CustomListCell extends ListCell<AddressBookEntry> {
 	}
 	
 	private void bindAddRemoveVisability(Button editButton, Button addButton, Button removeButton){
+		
+		// invisible nodes still takes up space. bind visibility to managed property
+		editButton.managedProperty().bind(editButton.visibleProperty());
+		addButton.managedProperty().bind(addButton.visibleProperty());
+		removeButton.managedProperty().bind(removeButton.visibleProperty());
+		
 		if(isInMainContactList) {
 			editButton.visibleProperty().bind(controller.inEditOrCreationModeProperty.not());			
 			addButton.visibleProperty().bind(controller.inEditOrCreationModeProperty);
@@ -170,7 +178,7 @@ public class CustomListCell extends ListCell<AddressBookEntry> {
 	}
 	
 	private Button createEditButton() {
-		Button editButton = new Button("Edit");
+		Button editButton = new Button();
 		final ImageView img = new ImageView();
 		img.setFitHeight(20);
 		img.setFitWidth(20);
