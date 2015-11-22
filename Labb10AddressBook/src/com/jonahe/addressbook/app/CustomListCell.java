@@ -21,13 +21,18 @@ import javafx.scene.paint.Stop;
 
 public class CustomListCell extends ListCell<AddressBookEntry> {
 
-	private final ImageView imageView;
 	private final File maleImagePath;
 	private final File femaleImagePath;
+	private final File editImagePath;
+	private final  ControllerAddressBook controller;
+	private final ImageView imageView;
 
-	public CustomListCell(File maleImagePath, File femaleImagePath) {
+	public CustomListCell(final File maleImagePath, final File femaleImagePath, final File editImagePath, final ControllerAddressBook controller) {
 		this.maleImagePath = maleImagePath;
 		this.femaleImagePath = femaleImagePath;
+		this.editImagePath = editImagePath;
+		this.controller = controller;
+		
 		imageView = new ImageView();
 		System.out.println(maleImagePath.exists());
 
@@ -68,11 +73,40 @@ public class CustomListCell extends ListCell<AddressBookEntry> {
 			cellGraphic.setBackground(new Background(new BackgroundFill(shadePaint, null, new Insets(-10))));
 			VBox vboxPersonDetails = new VBox(new Label(person.getFullName()), new Label(entry.getContactInfo().getPhoneNumber()));
 			vboxPersonDetails.setPrefWidth(150);
-			VBox optionButtons = new VBox(new Button("Edit"), new Button("Delete"));
+			Button editButton = new Button("Edit");
+			try {
+				final ImageView img = new ImageView();
+				img.setFitHeight(20);
+				img.setFitWidth(20);
+				img.setPreserveRatio(true);
+				img.setImage(new Image(editImagePath.toURI().toURL().toString(), true));
+				editButton.setGraphic(img);
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			bindAddRemoveVisability(editButton);
+			
+			setButtonListener(editButton);
+			VBox optionButtons = new VBox(editButton, new Button("Delete"));
 			optionButtons.setAlignment(Pos.TOP_CENTER);
 			
 			cellGraphic.getChildren().addAll(imageView, vboxPersonDetails, optionButtons);
 			setGraphic(cellGraphic);
 		}
+	}
+	
+	private void setButtonListener(Button btn) {
+		btn.setOnAction(event -> {
+			controller.listViewContacts.getSelectionModel().select(this.getItem());
+			controller.onEdit();
+			
+			}
+		);
+	}
+	
+	private void bindAddRemoveVisability(Button editButton){
+		editButton.visibleProperty().bind(controller.inEditOrCreationModeProperty.not());
 	}
 }

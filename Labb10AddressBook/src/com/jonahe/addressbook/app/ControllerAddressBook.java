@@ -16,6 +16,7 @@ import java.util.function.Predicate;
 
 import javafx.animation.FadeTransition;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -44,10 +45,12 @@ public class ControllerAddressBook implements Initializable{
 	
 	private static File maleImagePath = new File("img-and-icons//male.jpg");
 	private static File femaleImagePath = new File("img-and-icons//female.png");
+	private static File editImagePath = new File("img-and-icons//edit_property.png");
 	
 	private ArrayList<String> countries;
 	private Gender[] genders = Gender.values();
 	private boolean inEditOrCreationMode;
+	public SimpleBooleanProperty inEditOrCreationModeProperty = new SimpleBooleanProperty(false);
 	private AddressBookEntry entryBeingEdited;
 	
 	private AddressManager manager;
@@ -137,8 +140,9 @@ public class ControllerAddressBook implements Initializable{
 		
 		listViewConnections.setTooltip(new Tooltip("Right-click on entry in either list to add/remove"));
 		// new stuff
-		listViewConnections.setCellFactory(listView -> new CustomListCell(maleImagePath, femaleImagePath));
+		listViewConnections.setCellFactory(listView -> new CustomListCell(maleImagePath, femaleImagePath, editImagePath, this));
 		
+		inEditOrCreationModeProperty.addListener((event, old, newVal) -> System.out.println("changed edit mode")); 
 		
 	}
 	
@@ -188,7 +192,7 @@ public class ControllerAddressBook implements Initializable{
 		// hide menu if in wrong "mode". 
 		cMenu.focusedProperty().addListener(change -> {
 			System.out.println("Context menu focused");
-			if(!inEditOrCreationMode){
+			if(!inEditOrCreationModeProperty.get()){
 				cMenu.getItems().forEach(item -> item.setVisible(false));
 			} else {
 				if(listViewConnections.isFocused()){
@@ -215,6 +219,7 @@ public class ControllerAddressBook implements Initializable{
 		if(event.getButton() == MouseButton.PRIMARY){
 			
 			inEditOrCreationMode = false;
+			inEditOrCreationModeProperty.set(false);
 			
 			System.out.println("primary mouse btn");
 			if(listViewContacts.getSelectionModel().getSelectedIndex() != -1){
@@ -231,6 +236,8 @@ public class ControllerAddressBook implements Initializable{
 	private void onSelectEntry(){
 		
 		inEditOrCreationMode = false;
+		inEditOrCreationModeProperty.set(false);
+		
 		
 		System.out.println("onSelect with no args");
 		if(listViewContacts.getSelectionModel().getSelectedIndex() != -1){
@@ -261,9 +268,10 @@ public class ControllerAddressBook implements Initializable{
 	
 
 	@FXML 
-	private void onEdit(ActionEvent event){
+	public void onEdit(){
 		
 		inEditOrCreationMode = true;
+		inEditOrCreationModeProperty.set(true);
 		
 		System.out.println("Edit..");
 		if(listViewContacts.getSelectionModel().getSelectedIndex() != -1){
@@ -283,6 +291,8 @@ public class ControllerAddressBook implements Initializable{
 	private void onCreateNew(){
 		System.out.println("Creation mode");
 		inEditOrCreationMode = true;
+		inEditOrCreationModeProperty.set(true);
+		
 		
 		formHelper.clearFieldsForCreation();
 	}
@@ -344,7 +354,7 @@ public class ControllerAddressBook implements Initializable{
 		 * 
 		 */
 		
-		if(inEditOrCreationMode){
+		if(inEditOrCreationModeProperty.get()){
 			System.out.println("in edit or creation mode!");
 			AddressBookEntry selectedEntry = listViewContacts.getSelectionModel().getSelectedItem();
 			if(selectedEntry != null){
@@ -367,7 +377,7 @@ public class ControllerAddressBook implements Initializable{
 	private void onRemovePersonFromConnections(){
 		System.out.println("Remove from connections");
 		
-		if(inEditOrCreationMode){
+		if(inEditOrCreationModeProperty.get()){
 			System.out.println("in edit or creation mode!");
 			
 			// a selection can be in the contacts list, or in the connections list
@@ -523,7 +533,7 @@ public class ControllerAddressBook implements Initializable{
 	}
 	
 	private void setDefaultCellFactoryForPrimaryListView() {
-		listViewContacts.setCellFactory(listview -> new CustomListCell(maleImagePath, femaleImagePath));
+		listViewContacts.setCellFactory(listview -> new CustomListCell(maleImagePath, femaleImagePath, editImagePath, this));
 	}
 	
 	/**
