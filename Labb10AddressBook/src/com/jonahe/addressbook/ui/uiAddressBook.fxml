@@ -8,181 +8,187 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<HBox id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jonahe.addressbook.app.ControllerAddressBook">
+
+<StackPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jonahe.addressbook.app.ControllerAddressBook">
    <children>
-      <VBox prefHeight="590.0" prefWidth="400.0">
+      <ImageView fx:id="saveConfirmationImageView" fitHeight="201.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+      <HBox id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="670.0" spacing="5.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="TEXT_ONLY" prefHeight="37.0" prefWidth="316.0" text="Address book">
-               <font>
-                  <Font name="Arial Black" size="25.0" />
-               </font>
-            </Label>
-            <Accordion fx:id="accordionMain" prefHeight="554.0" prefWidth="393.0">
-              <panes>
-                <TitledPane alignment="CENTER" text="Contacts">
-                     <font>
-                        <Font name="Arial Black" size="16.0" />
-                     </font>
-                     <content>
-                        <VBox prefHeight="346.0" prefWidth="313.0" spacing="5.0">
-                           <children>
-                              <HBox alignment="CENTER_LEFT" prefHeight="37.0" prefWidth="282.0" spacing="5.0">
-                                 <children>
-                                    <Label text="Find">
-                                       <font>
-                                          <Font name="Arial Black" size="12.0" />
-                                       </font>
-                                    </Label>
-                                    <TextField fx:id="txtFldSearchContacts" prefHeight="29.0" prefWidth="225.0" />
-                                    <ImageView fx:id="searchImgView" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
-                                 </children>
-                                 <VBox.margin>
-                                    <Insets right="5.0" />
-                                 </VBox.margin>
-                              </HBox>
-                              <Label fx:id="labelNumberOfResults" alignment="TOP_CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="286.0" />
-                              <ListView fx:id="listViewContacts" onMouseClicked="#onSelectEntry" prefHeight="337.0" prefWidth="282.0" />
-                              <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0">
-                                 <children>
-                                    <Button fx:id="btnEdit" mnemonicParsing="false" onAction="#onEdit" text="Edit">
-                                       <font>
-                                          <Font name="Arial Black" size="14.0" />
-                                       </font>
-                                    </Button>
-                                    <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#onDelete" text="Delete">
-                                       <font>
-                                          <Font name="Arial Black" size="14.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets right="30.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                    <Button fx:id="btnCreate" mnemonicParsing="false" onAction="#onCreateNew" text="Create new">
-                                       <font>
-                                          <Font name="Arial Black" size="14.0" />
-                                       </font>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                     </content>
-                  </TitledPane>
-                <TitledPane fx:id="titledPaneBirthdays" alignment="CENTER" prefHeight="367.0" prefWidth="315.0" text="Upcoming birthdays">
-                     <font>
-                        <Font name="Arial Black" size="16.0" />
-                     </font>
-                     <content>
-                        <ListView fx:id="listViewBirthdays" prefHeight="200.0" prefWidth="200.0" />
-                     </content>
-                  </TitledPane>
-              </panes>
-            </Accordion>
-         </children>
-      </VBox>
-      <VBox prefHeight="590.0" prefWidth="400.0">
-         <children>
-            <Label alignment="CENTER" prefHeight="38.0" prefWidth="321.0" text="Contact info" textAlignment="CENTER" VBox.vgrow="NEVER">
-               <font>
-                  <Font name="Arial Black" size="22.0" />
-               </font>
-            </Label>
-            <GridPane prefHeight="290.0" prefWidth="300.0" styleClass="form" vgap="2.0">
-               <columnConstraints>
-                  <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" maxWidth="160.0" minWidth="10.0" prefWidth="119.0" />
-                  <ColumnConstraints maxWidth="189.0" minWidth="10.0" prefWidth="161.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints maxHeight="21.666667938232422" minHeight="10.0" valignment="CENTER" vgrow="NEVER" />
-                  <RowConstraints maxHeight="32.33333206176758" minHeight="10.0" valignment="CENTER" vgrow="NEVER" />
-                  <RowConstraints maxHeight="33.0" minHeight="10.0" prefHeight="22.0" valignment="CENTER" vgrow="NEVER" />
-                  <RowConstraints maxHeight="33.0" minHeight="10.0" prefHeight="20.0" valignment="CENTER" vgrow="NEVER" />
-                  <RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="ALWAYS" />
-                  <RowConstraints vgrow="ALWAYS" />
-                  <RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="ALWAYS" />
-                  <RowConstraints maxHeight="35.0" minHeight="10.0" valignment="CENTER" vgrow="NEVER" />
-                  <RowConstraints minHeight="10.0" valignment="CENTER" vgrow="NEVER" />
-                  <RowConstraints minHeight="10.0" valignment="CENTER" vgrow="NEVER" />
-                  <RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="ALWAYS" />
-                  <RowConstraints maxHeight="36.33331298828125" vgrow="ALWAYS" />
-               </rowConstraints>
+            <VBox prefHeight="590.0" prefWidth="400.0">
                <children>
-                  <Label prefHeight="17.0" prefWidth="156.0" text="First name">
+                  <Label alignment="CENTER" contentDisplay="TEXT_ONLY" prefHeight="37.0" prefWidth="316.0" text="Address book">
                      <font>
-                        <Font name="Arial" size="13.0" />
-                     </font>
-                     <padding>
-                        <Insets right="5.0" />
-                     </padding>
-                  </Label>
-                  <Label text="Street name" GridPane.rowIndex="7">
-                     <font>
-                        <Font name="Arial" size="13.0" />
+                        <Font name="Arial Black" size="25.0" />
                      </font>
                   </Label>
-                  <Label text="Gender" GridPane.rowIndex="3">
-                     <font>
-                        <Font name="Arial" size="13.0" />
-                     </font>
-                  </Label>
-                  <Label prefHeight="17.0" prefWidth="102.0" text="Last name" GridPane.rowIndex="1">
-                     <font>
-                        <Font name="Arial" size="13.0" />
-                     </font>
-                     <GridPane.margin>
-                        <Insets />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="Country" GridPane.rowIndex="9">
-                     <font>
-                        <Font name="Arial" size="13.0" />
-                     </font>
-                  </Label>
-                  <Label text="City" GridPane.rowIndex="8">
-                     <font>
-                        <Font name="Arial" size="13.0" />
-                     </font>
-                  </Label>
-                  <ComboBox fx:id="comboBox_Gender" maxHeight="25.0" prefHeight="25.0" prefWidth="163.0" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS" />
-                  <ComboBox fx:id="comboBox_Country" prefHeight="25.0" prefWidth="161.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-                  <TextField fx:id="txtFldFirstName" editable="false" GridPane.columnIndex="1" />
-                  <TextField fx:id="txtFldLastName" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField fx:id="txtFldStreetName" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                  <TextField fx:id="txtFldCity" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-                  <Label text="Phone number" GridPane.rowIndex="5">
-                     <font>
-                        <Font name="Arial" size="13.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="txtFldPhoneNum" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                  <Button fx:id="btnSaveContact" mnemonicParsing="false" onAction="#onSave" prefHeight="25.0" text="Save changes" visible="false" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="11" />
-                  <Label text="Date of birth" GridPane.rowIndex="2">
-                     <font>
-                        <Font name="Arial" size="13.0" />
-                     </font>
-                  </Label>
-                  <DatePicker fx:id="datePicker" editable="false" promptText="yyyy-mm-dd" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Accordion fx:id="accordionMain" prefHeight="554.0" prefWidth="393.0">
+                    <panes>
+                      <TitledPane alignment="CENTER" text="Contacts">
+                           <font>
+                              <Font name="Arial Black" size="16.0" />
+                           </font>
+                           <content>
+                              <VBox prefHeight="346.0" prefWidth="313.0" spacing="5.0">
+                                 <children>
+                                    <HBox alignment="CENTER" prefHeight="37.0" prefWidth="282.0" spacing="5.0">
+                                       <children>
+                                          <Label text="Find">
+                                             <font>
+                                                <Font name="Arial Black" size="12.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="txtFldSearchContacts" prefHeight="29.0" prefWidth="225.0" />
+                                          <ImageView fx:id="searchImgView" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets right="5.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                    <Label fx:id="labelNumberOfResults" alignment="TOP_CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="286.0" />
+                                    <ListView fx:id="listViewContacts" onMouseClicked="#onSelectEntry" prefHeight="435.0" prefWidth="300.0" />
+                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+                                       <children>
+                                          <Button fx:id="btnEdit" mnemonicParsing="false" onAction="#onEdit" prefHeight="32.0" prefWidth="15.0" text="Edit" visible="false">
+                                             <font>
+                                                <Font name="Arial Black" size="13.0" />
+                                             </font>
+                                          </Button>
+                                          <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#onDelete" text="Delete">
+                                             <font>
+                                                <Font name="Arial Black" size="13.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets right="30.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                          <Button fx:id="btnCreate" mnemonicParsing="false" onAction="#onCreateNew" text="Create new">
+                                             <font>
+                                                <Font name="Arial Black" size="13.0" />
+                                             </font>
+                                          </Button>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </content>
+                        </TitledPane>
+                      <TitledPane fx:id="titledPaneBirthdays" alignment="CENTER" prefHeight="367.0" prefWidth="315.0" text="Upcoming birthdays">
+                           <font>
+                              <Font name="Arial Black" size="16.0" />
+                           </font>
+                           <content>
+                              <ListView fx:id="listViewBirthdays" prefHeight="200.0" prefWidth="200.0" />
+                           </content>
+                        </TitledPane>
+                    </panes>
+                  </Accordion>
                </children>
-               <VBox.margin>
-                  <Insets left="5.0" right="5.0" />
-               </VBox.margin>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </GridPane>
-            <Label alignment="CENTER" prefHeight="17.0" prefWidth="319.0" text="Contact connections">
-               <font>
-                  <Font name="Arial Black" size="13.0" />
-               </font>
-            </Label>
-            <ListView fx:id="listViewConnections" prefHeight="236.0" prefWidth="393.0" />
+            </VBox>
+            <VBox prefHeight="590.0" prefWidth="400.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="38.0" prefWidth="321.0" text="Contact info" textAlignment="CENTER" VBox.vgrow="NEVER">
+                     <font>
+                        <Font name="Arial Black" size="22.0" />
+                     </font>
+                  </Label>
+                  <GridPane prefHeight="290.0" prefWidth="300.0" styleClass="form" vgap="2.0">
+                     <columnConstraints>
+                        <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" maxWidth="160.0" minWidth="10.0" prefWidth="119.0" />
+                        <ColumnConstraints maxWidth="189.0" minWidth="10.0" prefWidth="161.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints maxHeight="21.666667938232422" minHeight="10.0" valignment="CENTER" vgrow="NEVER" />
+                        <RowConstraints maxHeight="32.33333206176758" minHeight="10.0" valignment="CENTER" vgrow="NEVER" />
+                        <RowConstraints maxHeight="33.0" minHeight="10.0" prefHeight="22.0" valignment="CENTER" vgrow="NEVER" />
+                        <RowConstraints maxHeight="33.0" minHeight="10.0" prefHeight="20.0" valignment="CENTER" vgrow="NEVER" />
+                        <RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="ALWAYS" />
+                        <RowConstraints vgrow="ALWAYS" />
+                        <RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="ALWAYS" />
+                        <RowConstraints maxHeight="35.0" minHeight="10.0" valignment="CENTER" vgrow="NEVER" />
+                        <RowConstraints minHeight="10.0" valignment="CENTER" vgrow="NEVER" />
+                        <RowConstraints minHeight="10.0" valignment="CENTER" vgrow="NEVER" />
+                        <RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="ALWAYS" />
+                        <RowConstraints maxHeight="36.33331298828125" vgrow="ALWAYS" />
+                     </rowConstraints>
+                     <children>
+                        <Label prefHeight="17.0" prefWidth="156.0" text="First name">
+                           <font>
+                              <Font name="Arial" size="13.0" />
+                           </font>
+                           <padding>
+                              <Insets right="5.0" />
+                           </padding>
+                        </Label>
+                        <Label text="Street name" GridPane.rowIndex="7">
+                           <font>
+                              <Font name="Arial" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label text="Gender" GridPane.rowIndex="3">
+                           <font>
+                              <Font name="Arial" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label prefHeight="17.0" prefWidth="102.0" text="Last name" GridPane.rowIndex="1">
+                           <font>
+                              <Font name="Arial" size="13.0" />
+                           </font>
+                           <GridPane.margin>
+                              <Insets />
+                           </GridPane.margin>
+                        </Label>
+                        <Label text="Country" GridPane.rowIndex="9">
+                           <font>
+                              <Font name="Arial" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label text="City" GridPane.rowIndex="8">
+                           <font>
+                              <Font name="Arial" size="13.0" />
+                           </font>
+                        </Label>
+                        <ComboBox fx:id="comboBox_Gender" maxHeight="25.0" prefHeight="25.0" prefWidth="163.0" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS" />
+                        <ComboBox fx:id="comboBox_Country" prefHeight="25.0" prefWidth="161.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                        <TextField fx:id="txtFldFirstName" editable="false" GridPane.columnIndex="1" />
+                        <TextField fx:id="txtFldLastName" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtFldStreetName" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                        <TextField fx:id="txtFldCity" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                        <Label text="Phone number" GridPane.rowIndex="5">
+                           <font>
+                              <Font name="Arial" size="13.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="txtFldPhoneNum" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <Button fx:id="btnSaveContact" mnemonicParsing="false" onAction="#onSave" prefHeight="25.0" text="Save changes" visible="false" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="11" />
+                        <Label text="Date of birth" GridPane.rowIndex="2">
+                           <font>
+                              <Font name="Arial" size="13.0" />
+                           </font>
+                        </Label>
+                        <DatePicker fx:id="datePicker" editable="false" promptText="yyyy-mm-dd" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                     </children>
+                     <VBox.margin>
+                        <Insets left="5.0" right="5.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </GridPane>
+                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="319.0" text="Contact connections">
+                     <font>
+                        <Font name="Arial Black" size="13.0" />
+                     </font>
+                  </Label>
+                  <ListView fx:id="listViewConnections" prefHeight="236.0" prefWidth="393.0" />
+               </children>
+            </VBox>
          </children>
-      </VBox>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </HBox>
    </children>
-   <padding>
-      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-   </padding>
-</HBox>
+</StackPane>

@@ -13,10 +13,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.Paint;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
 
@@ -180,8 +182,8 @@ public class CustomListCell extends ListCell<AddressBookEntry> {
 	private Button createEditButton() {
 		Button editButton = new Button();
 		final ImageView img = new ImageView();
-		img.setFitHeight(20);
-		img.setFitWidth(20);
+		img.setFitHeight(25);
+		img.setFitWidth(25);
 		img.setPreserveRatio(true);
 		try {
 			img.setImage(new Image(editImagePath.toURI().toURL().toString(), true));
@@ -197,8 +199,8 @@ public class CustomListCell extends ListCell<AddressBookEntry> {
 	private Button createAddButton(){
 		Button addButton = new Button();
 		final ImageView img = new ImageView();
-		img.setFitHeight(20);
-		img.setFitWidth(20);
+		img.setFitHeight(25);
+		img.setFitWidth(25);
 		img.setPreserveRatio(true);
 		try {
 			img.setImage(new Image(addContactImagePath.toURI().toURL().toString(), true));
@@ -207,6 +209,7 @@ public class CustomListCell extends ListCell<AddressBookEntry> {
 			e.printStackTrace();
 		}
 		addButton.setGraphic(img);
+		// addButton.setBackground(new Background(new BackgroundFill(Paint.valueOf("TRANSPARENT"), null, new Insets(0.0))));
 		
 		return addButton;
 	}
@@ -214,8 +217,8 @@ public class CustomListCell extends ListCell<AddressBookEntry> {
 	private Button createRemoveButton(){
 		Button removeBtn = new Button();
 		final ImageView img = new ImageView();
-		img.setFitHeight(20);
-		img.setFitWidth(20);
+		img.setFitHeight(25);
+		img.setFitWidth(25);
 		img.setPreserveRatio(true);
 		try {
 			img.setImage(new Image(removeContactImagePath.toURI().toURL().toString(), true));

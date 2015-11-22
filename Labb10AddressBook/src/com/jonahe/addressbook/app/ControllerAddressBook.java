@@ -52,12 +52,13 @@ public class ControllerAddressBook implements Initializable{
 	private static File maleImagePath = new File("img-and-icons//male.jpg");
 	private static File femaleImagePath = new File("img-and-icons//female.png");
 	private static File editImagePath = new File("img-and-icons//edit_property.png");
-	private static File addContactImagePath = new File("img-and-icons//add_user.png");
-	private static File removeContactImagePath = new File("img-and-icons//remove.png");
+	private static File addContactImagePath = new File("img-and-icons//plus.png");
+	private static File removeContactImagePath = new File("img-and-icons//minus.png");
 	
 	private static File saveButtonImagePath = new File("img-and-icons//save.png");
 	private static File lockedImagePath = new File("img-and-icons//lock.png");
 	private static File searchImagePath = new File("img-and-icons//search.png");
+	private static File createContactImagePath = new File("img-and-icons//add_user.png");
 	private static File deleteImagePath = new File("img-and-icons//trash.png");
 	private static File saveConfirmationImagePath = new File("img-and-icons//confirm_save.png");
 	
@@ -75,8 +76,14 @@ public class ControllerAddressBook implements Initializable{
 	// FX property values  - bound to..
 	private BooleanBinding searchFieldEmpty;
 	
+
 	
 	// FXML variables
+	
+	// background
+	@FXML
+	ImageView saveConfirmationImageView;
+	
 	@FXML
 	Accordion accordionMain;
 	@FXML
@@ -198,6 +205,27 @@ public class ControllerAddressBook implements Initializable{
 			e.printStackTrace();
 		}
 		
+		ImageView createUserImage = new ImageView();
+		createUserImage.setFitHeight(30);
+		createUserImage.setFitWidth(30);
+		createUserImage.setPreserveRatio(true);
+		try {
+			createUserImage.setImage(new Image(createContactImagePath.toURI().toURL().toString()));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		btnCreate.setGraphic(createUserImage);
+		
+		
+		try {
+			searchImgView.setImage(new Image(searchImagePath.toURI().toURL().toString()));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 		
 		// don't forget to save
 		btnSaveContact.setTooltip(new Tooltip("Don't forget to save changes!"));
@@ -214,6 +242,18 @@ public class ControllerAddressBook implements Initializable{
 			}
 		});
 		
+		
+		// confirmation save
+		try {
+			saveConfirmationImageView.setImage(new Image(saveConfirmationImagePath.toURI().toURL().toString()));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		// orginial edit btn no longer needed.
+		btnEdit.setManaged(false);
 	}
 	
 	
@@ -414,24 +454,25 @@ public class ControllerAddressBook implements Initializable{
 		
 		
 		//TODO: save confirmation tooltip
-		ImageView saveConfirmImage = new ImageView();
-		saveConfirmImage.setFitHeight(40);
-		saveConfirmImage.setFitWidth(40);
-		saveConfirmImage.setPreserveRatio(true);
-		try {
-			saveConfirmImage.setImage(new Image(saveConfirmationImagePath.toURI().toURL().toString()));
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-//		Alert alert = new Alert(AlertType.NONE);
-//		alert.setGraphic(saveConfirmImage);
-//		alert.show();
-		
-		saveConfirmImage.setVisible(true);
-
+		showAndAnimateSaveConfirmation();
 		
 		
+	}
+	
+	private void showAndAnimateSaveConfirmation() {
+		System.out.println("Animation time!");
+		saveConfirmationImageView.toFront();
+		saveConfirmationImageView.setVisible(true);
+		FadeTransition fade = new FadeTransition(Duration.millis(1200), saveConfirmationImageView);
+		fade.setFromValue(1.0);
+		fade.setToValue(0);
+		fade.setCycleCount(1);
+		fade.setOnFinished(event -> {
+		saveConfirmationImageView.setVisible(false);
+		saveConfirmationImageView.toBack();	
+		});
+		fade.play();
+		System.out.println(btnEdit.getFont());
 	}
 	
 	
