@@ -252,8 +252,10 @@ public class ControllerAddressBook implements Initializable{
 		}
 		
 		
-		// orginial edit btn no longer needed.
+		// original edit btn no longer needed.
 		btnEdit.setManaged(false);
+		
+		
 	}
 	
 	

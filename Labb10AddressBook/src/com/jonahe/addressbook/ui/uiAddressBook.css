@@ -8,7 +8,8 @@
 
 
 #root {
-	
+	-fx-focus-color: #A13D30;
+	 -fx-accent: #A13D30;
 }
 
 

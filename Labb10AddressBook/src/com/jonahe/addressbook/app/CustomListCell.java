@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -80,13 +81,14 @@ public class CustomListCell extends ListCell<AddressBookEntry> {
 			// gradient
 			RadialGradient shadePaint = new RadialGradient(
 					0, 0, 0.5, 0.5, 1, true, CycleMethod.NO_CYCLE,
-					new Stop(1, Color.LIGHTBLUE),
+					new Stop(1, Color.valueOf("#ED5A47")),
 					new Stop(0, Color.TRANSPARENT)
 					);
 
 
 			HBox cellGraphic = new HBox();
 			cellGraphic.setBackground(new Background(new BackgroundFill(shadePaint, null, new Insets(-10))));
+			
 			VBox vboxPersonDetails = new VBox(new Label(person.getFullName()), new Label(entry.getContactInfo().getPhoneNumber()));
 			vboxPersonDetails.setAlignment(Pos.CENTER_LEFT);
 			vboxPersonDetails.setPadding(new Insets(0,3,0,5));
@@ -117,6 +119,9 @@ public class CustomListCell extends ListCell<AddressBookEntry> {
 			
 			cellGraphic.getChildren().addAll(imageView, vboxPersonDetails, optionButtons);
 			setGraphic(cellGraphic);
+			
+			// this.setEffect(new InnerShadow(2, Color.GRAY)); // only visible on empty rows? 
+			this.setPrefHeight(75);
 		}
 	}
 	
