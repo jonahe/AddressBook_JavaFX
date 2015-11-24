@@ -25,33 +25,32 @@ import javafx.scene.paint.Stop;
 
 public class CustomListCell extends ListCell<AddressBookEntry> {
 
-	private final File maleImagePath;
-	private final File femaleImagePath;
-	private final File editImagePath;
-	private final File addContactImagePath;
-	private final File removeContactImagePath;
+	private final Image maleImage;
+	private final Image femaleImage;
+	private final Image editImage;
+	private final Image addContactImage;
+	private final Image removeContactImage;
 	
 	private final  ControllerAddressBook controller;
 	private final boolean isInMainContactList; // different things should show up depending on which listview we're dealing with
 	private final ImageView imageView;
 
-	public CustomListCell(	final File maleImagePath, 
-							final File femaleImagePath, 
-							final File editImagePath,
-							final File addContactImagePath,
-							final File removeContactImagePath,
+	public CustomListCell(	final Image maleImage, 
+							final Image femaleImage, 
+							final Image editImage,
+							final Image addContactImage,
+							final Image removeContactImage,
 							final ControllerAddressBook controller,
 							final boolean isInMainContactList) {
-		this.maleImagePath = maleImagePath;
-		this.femaleImagePath = femaleImagePath;
-		this.editImagePath = editImagePath;
-		this.addContactImagePath = addContactImagePath;
-		this.removeContactImagePath = removeContactImagePath;
+		this.maleImage = maleImage;
+		this.femaleImage = femaleImage;
+		this.editImage = editImage;
+		this.addContactImage = addContactImage;
+		this.removeContactImage = removeContactImage;
 		this.controller = controller;
 		this.isInMainContactList = isInMainContactList;
 		
 		imageView = new ImageView();
-		System.out.println(maleImagePath.exists());
 
 
 		imageView.setFitHeight(60);
@@ -61,29 +60,27 @@ public class CustomListCell extends ListCell<AddressBookEntry> {
 
 
 
+
 	@Override
 	protected void updateItem(AddressBookEntry entry, boolean empty) {
 		super.updateItem(entry, empty);
+		
+		// gradient
+		RadialGradient shadePaint = new RadialGradient(
+				0, 0, 0.5, 0.5, 1, true, CycleMethod.NO_CYCLE,
+				new Stop(1, Color.valueOf("#ED5A47")),
+				new Stop(0, Color.TRANSPARENT)
+				);
+		// this.setBackground(new Background(new BackgroundFill(shadePaint, null, new Insets(-10))));
+		
 		if(empty) {
 			setText(null);
 			setGraphic(null);
+			// this.setBackground(new Background(new BackgroundFill(null, null, null)));
 		} else {
 			Person person = entry.getPerson();
-			File imagePath = person.getGender() == Gender.MALE ? maleImagePath : femaleImagePath;
-			try {
-				imageView.setImage(new Image(imagePath.toURI().toURL().toString(), true));
-			} catch (MalformedURLException e) {
-				System.out.println("Something went wrong in loadig img url");
-				e.printStackTrace();
-			}
-
-
-			// gradient
-			RadialGradient shadePaint = new RadialGradient(
-					0, 0, 0.5, 0.5, 1, true, CycleMethod.NO_CYCLE,
-					new Stop(1, Color.valueOf("#ED5A47")),
-					new Stop(0, Color.TRANSPARENT)
-					);
+			Image genderimage = person.getGender() == Gender.MALE ? maleImage : femaleImage;
+			imageView.setImage(genderimage);
 
 
 			HBox cellGraphic = new HBox();
@@ -120,7 +117,7 @@ public class CustomListCell extends ListCell<AddressBookEntry> {
 			cellGraphic.getChildren().addAll(imageView, vboxPersonDetails, optionButtons);
 			setGraphic(cellGraphic);
 			
-			// this.setEffect(new InnerShadow(2, Color.GRAY)); // only visible on empty rows? 
+			//this.setEffect(new InnerShadow(2, Color.GRAY)); // only visible on empty rows? 
 			this.setPrefHeight(75);
 		}
 	}
@@ -190,12 +187,8 @@ public class CustomListCell extends ListCell<AddressBookEntry> {
 		img.setFitHeight(25);
 		img.setFitWidth(25);
 		img.setPreserveRatio(true);
-		try {
-			img.setImage(new Image(editImagePath.toURI().toURL().toString(), true));
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		img.setImage(editImage);
+
 		editButton.setGraphic(img);
 		
 		return editButton;
@@ -207,14 +200,10 @@ public class CustomListCell extends ListCell<AddressBookEntry> {
 		img.setFitHeight(25);
 		img.setFitWidth(25);
 		img.setPreserveRatio(true);
-		try {
-			img.setImage(new Image(addContactImagePath.toURI().toURL().toString(), true));
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		img.setImage(addContactImage);
+
 		addButton.setGraphic(img);
-		// addButton.setBackground(new Background(new BackgroundFill(Paint.valueOf("TRANSPARENT"), null, new Insets(0.0))));
+		//addButton.setBackground(new Background(new BackgroundFill(Paint.valueOf("TRANSPARENT"), null, new Insets(0.0))));
 		
 		return addButton;
 	}
@@ -225,12 +214,8 @@ public class CustomListCell extends ListCell<AddressBookEntry> {
 		img.setFitHeight(25);
 		img.setFitWidth(25);
 		img.setPreserveRatio(true);
-		try {
-			img.setImage(new Image(removeContactImagePath.toURI().toURL().toString(), true));
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		img.setImage(removeContactImage);
+
 		removeBtn.setGraphic(img);
 		
 		return removeBtn;

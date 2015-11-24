@@ -24,7 +24,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -39,10 +41,12 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.Tooltip;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Window;
 import javafx.util.Duration;
 
 public class ControllerAddressBook implements Initializable{
@@ -51,9 +55,16 @@ public class ControllerAddressBook implements Initializable{
 	
 	private static File maleImagePath = new File("img-and-icons//male.jpg");
 	private static File femaleImagePath = new File("img-and-icons//female.png");
+	private static Image maleImage;
+	private static Image femaleImage;
+	
+	
 	private static File editImagePath = new File("img-and-icons//edit_property.png");
 	private static File addContactImagePath = new File("img-and-icons//plus.png");
 	private static File removeContactImagePath = new File("img-and-icons//minus.png");
+	private static Image editImage;
+	private static Image addContactImage;
+	private static Image removeContactImage;
 	
 	private static File saveButtonImagePath = new File("img-and-icons//save.png");
 	private static File lockedImagePath = new File("img-and-icons//lock.png");
@@ -138,6 +149,19 @@ public class ControllerAddressBook implements Initializable{
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
+		// load the reused images
+		try {
+			maleImage = new Image(maleImagePath.toURI().toURL().toString(), true);
+			femaleImage = new Image(femaleImagePath.toURI().toURL().toString(), true);
+			editImage = new Image(editImagePath.toURI().toURL().toString(), true);
+			addContactImage = new Image(addContactImagePath.toURI().toURL().toString(), true);
+			removeContactImage = new Image(removeContactImagePath.toURI().toURL().toString(), true);
+		} catch (MalformedURLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		generateCountryList();
 		populateCountryComboBox();
 		populateGenderComboBox();
@@ -165,7 +189,7 @@ public class ControllerAddressBook implements Initializable{
 		// new stuff
 		
 		listViewConnections.setTooltip(new Tooltip("Right-click on entry in either list to add/remove"));
-		listViewConnections.setCellFactory(listView -> new CustomListCell(maleImagePath, femaleImagePath, editImagePath, addContactImagePath, removeContactImagePath, this, false));
+		listViewConnections.setCellFactory(listView -> new CustomListCell(maleImage, femaleImage, editImage, addContactImage, removeContactImage, this, false));
 		
 		inEditOrCreationModeProperty.addListener((event, old, newVal) -> System.out.println("changed edit mode")); 
 		
@@ -462,6 +486,9 @@ public class ControllerAddressBook implements Initializable{
 	}
 	
 	private void showAndAnimateSaveConfirmation() {
+		Scene scene = txtFldCity.getScene();
+		scene.setCursor(Cursor.WAIT);
+		
 		System.out.println("Animation time!");
 		saveConfirmationImageView.toFront();
 		saveConfirmationImageView.setVisible(true);
@@ -471,10 +498,13 @@ public class ControllerAddressBook implements Initializable{
 		fade.setCycleCount(1);
 		fade.setOnFinished(event -> {
 		saveConfirmationImageView.setVisible(false);
-		saveConfirmationImageView.toBack();	
+		saveConfirmationImageView.toBack();
+		scene.setCursor(Cursor.DEFAULT);
 		});
 		fade.play();
-		System.out.println(btnEdit.getFont());
+		
+		
+		
 	}
 	
 	
@@ -668,7 +698,7 @@ public class ControllerAddressBook implements Initializable{
 	}
 	
 	private void setDefaultCellFactoryForPrimaryListView() {
-		listViewContacts.setCellFactory(listview -> new CustomListCell(maleImagePath, femaleImagePath, editImagePath, addContactImagePath, removeContactImagePath, this, true));
+		listViewContacts.setCellFactory(listview -> new CustomListCell(maleImage, femaleImage, editImage, addContactImage, removeContactImage, this, true));
 	}
 	
 	/**

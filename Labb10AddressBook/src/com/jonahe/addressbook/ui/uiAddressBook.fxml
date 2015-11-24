@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<StackPane prefHeight="804.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jonahe.addressbook.app.ControllerAddressBook">
+<StackPane prefHeight="804.0" prefWidth="906.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jonahe.addressbook.app.ControllerAddressBook">
    <children>
-      <Label alignment="BOTTOM_CENTER" prefHeight="92.0" prefWidth="800.0" style="-fx-background-color: #409AD4;" StackPane.alignment="BOTTOM_CENTER" />
+      <Label alignment="BOTTOM_CENTER" prefHeight="92.0" prefWidth="1401.0" style="-fx-background-color: #409AD4;" StackPane.alignment="BOTTOM_CENTER" />
       <ImageView fx:id="saveConfirmationImageView" fitHeight="201.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" visible="false" />
       <HBox id="root" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="733.0" prefWidth="725.0" spacing="5.0" style="-fx-background-color: #409AD4;">
          <children>
@@ -189,7 +189,7 @@
             </VBox>
          </children>
          <padding>
-            <Insets bottom="20.0" left="40.0" right="40.0" top="70.0" />
+            <Insets bottom="20.0" left="20.0" right="20.0" top="70.0" />
          </padding>
          <StackPane.margin>
             <Insets top="40.0" />
@@ -198,7 +198,7 @@
             <DropShadow />
          </effect>
       </HBox>
-      <Label alignment="CENTER" prefHeight="91.0" prefWidth="800.0" style="-fx-background-color: #409AD4;" text="ADDRESS BOOK" textFill="#fffbea" StackPane.alignment="TOP_CENTER">
+      <Label alignment="CENTER" prefHeight="91.0" prefWidth="1397.0" style="-fx-background-color: #409AD4;" text="ADDRESS BOOK" textFill="#fffbea" StackPane.alignment="TOP_CENTER">
          <font>
             <Font name="Arial Black" size="62.0" />
          </font>
