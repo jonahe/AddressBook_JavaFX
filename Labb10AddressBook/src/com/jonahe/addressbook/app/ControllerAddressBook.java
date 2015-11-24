@@ -19,6 +19,7 @@ import javafx.animation.FadeTransition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -55,8 +56,8 @@ public class ControllerAddressBook implements Initializable{
 	
 	private static File maleImagePath = new File("img-and-icons//male.jpg");
 	private static File femaleImagePath = new File("img-and-icons//female.png");
-	private static Image maleImage;
-	private static Image femaleImage;
+	static Image maleImage;
+	static Image femaleImage;
 	
 	
 	private static File editImagePath = new File("img-and-icons//edit_property.png");
@@ -86,6 +87,8 @@ public class ControllerAddressBook implements Initializable{
 	
 	// FX property values  - bound to..
 	private BooleanBinding searchFieldEmpty;
+	
+	private SimpleObjectProperty<AddressBookEntry> selectedEntryProperty = new SimpleObjectProperty<>();
 	
 
 	
@@ -121,6 +124,9 @@ public class ControllerAddressBook implements Initializable{
 	
 	
 	// FXML variables for FORM
+	
+	@FXML
+	ImageView contactProfileImageView;
 	
 	// Person
 	@FXML
@@ -161,6 +167,16 @@ public class ControllerAddressBook implements Initializable{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		
+		// bind so that the imageview in the form show the right image.
+		selectedEntryProperty.bind(listViewContacts.getSelectionModel().selectedItemProperty());
+		
+//		// Image img = selectedEntryProperty.get().getPerson().getGender() == Gender.MALE ? maleImage : femaleImage;
+//		contactProfileImageView.imageProperty().bind(	Bindings
+//				.when(selectedEntryProperty.isNotNull())
+//				.then(selectedEntryProperty.get().getPerson().getGender() == Gender.MALE ? maleImage : femaleImage)
+//				.otherwise(maleImage));
+//		
 		
 		generateCountryList();
 		populateCountryComboBox();
@@ -278,6 +294,11 @@ public class ControllerAddressBook implements Initializable{
 		
 		// original edit btn no longer needed.
 		btnEdit.setManaged(false);
+		
+		
+		
+		// also preselect the first element
+		listViewConnections.getSelectionModel().select(0);
 		
 		
 	}
@@ -614,7 +635,8 @@ public class ControllerAddressBook implements Initializable{
 												comboBox_Country,
 												btnSaveContact,
 												listViewConnections,
-												manager
+												manager,
+												this
 				);
 	}
 

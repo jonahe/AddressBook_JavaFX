@@ -10,6 +10,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 
 /**
  * Creates objects from JavaFX fields and more.
@@ -39,6 +40,7 @@ public class EntryJavaFXMediator {
 	boolean firstTimeStyling = true;
 	List<TextField> textFields;
 	AddressManager manager;
+	ControllerAddressBook controller;
 	
 	
 	public EntryJavaFXMediator(	TextField txtFldFirstName, 
@@ -51,7 +53,8 @@ public class EntryJavaFXMediator {
 								ComboBox<String> comboBox_Country,
 								Button btnSaveContact,
 								ListView<AddressBookEntry> listViewConnections,
-								AddressManager manager
+								AddressManager manager,
+								ControllerAddressBook controller
 								){
 		
 		
@@ -66,6 +69,7 @@ public class EntryJavaFXMediator {
 		this.btnSaveContact = btnSaveContact;
 		this.listViewConnections = listViewConnections;
 		this.manager = manager;
+		this.controller = controller;
 		
 		textFields = new ArrayList<TextField>();
 		Collections.addAll(textFields, txtFldFirstName, txtFldLastName, txtFldPhoneNum, txtFldStreetName, txtFldCity);
@@ -102,8 +106,9 @@ public class EntryJavaFXMediator {
 		listViewConnections.getItems().clear();
 		listViewConnections.getItems().addAll(connectionEntries);
 		
-		
-		
+		// img change
+		Image img = person.getGender() == Gender.MALE ? controller.maleImage : controller.femaleImage;
+		controller.contactProfileImageView.setImage(img);
 
 	}
 	
