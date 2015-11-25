@@ -34,7 +34,10 @@
                                                 <Font name="Arial Black" size="12.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="txtFldSearchContacts" prefHeight="29.0" prefWidth="225.0" />
+                                          <TextField fx:id="txtFldSearchContacts" prefHeight="29.0" prefWidth="225.0">
+                                             <tooltip>
+                                                <Tooltip text="Search for name, country, street, city" />
+                                             </tooltip></TextField>
                                           <ImageView fx:id="searchImgView" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
                                        </children>
                                        <VBox.margin>

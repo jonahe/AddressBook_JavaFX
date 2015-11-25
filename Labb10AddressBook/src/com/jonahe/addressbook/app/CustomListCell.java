@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.Tooltip;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -34,6 +35,10 @@ public class CustomListCell extends ListCell<AddressBookEntry> {
 	private final  ControllerAddressBook controller;
 	private final boolean isInMainContactList; // different things should show up depending on which listview we're dealing with
 	private final ImageView imageView;
+	
+	private static Tooltip addTooltip = new Tooltip("Add as contact connection");
+	private static Tooltip removeTooltip = new Tooltip("Remove from contact connections");
+	private static Tooltip editTooltip = new Tooltip("Edit contact");
 
 	public CustomListCell(	final Image maleImage, 
 							final Image femaleImage, 
@@ -190,6 +195,7 @@ public class CustomListCell extends ListCell<AddressBookEntry> {
 		img.setImage(editImage);
 
 		editButton.setGraphic(img);
+		editButton.setTooltip(editTooltip);
 		
 		return editButton;
 	}
@@ -204,7 +210,7 @@ public class CustomListCell extends ListCell<AddressBookEntry> {
 
 		addButton.setGraphic(img);
 		//addButton.setBackground(new Background(new BackgroundFill(Paint.valueOf("TRANSPARENT"), null, new Insets(0.0))));
-		
+		addButton.setTooltip(addTooltip);
 		return addButton;
 	}
 	
@@ -217,6 +223,7 @@ public class CustomListCell extends ListCell<AddressBookEntry> {
 		img.setImage(removeContactImage);
 
 		removeBtn.setGraphic(img);
+		removeBtn.setTooltip(removeTooltip);
 		
 		return removeBtn;
 	}

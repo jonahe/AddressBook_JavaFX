@@ -368,6 +368,7 @@ public class ControllerAddressBook implements Initializable{
 		btnDelete.disableProperty().bind(inEditOrCreationModeProperty);
 		
 		inEditOrCreationModeProperty.set(true);
+		inEditOrCreationModeProperty.set(false);
 		
 	}
 	
@@ -380,17 +381,21 @@ public class ControllerAddressBook implements Initializable{
 	private void showTooltipForXMillis(Control control, int millis) {
 		Tooltip tooltip = control.getTooltip();
 		if(tooltip != null) {
-			System.out.println("showing tooltip");
-			tooltip.show(control.getScene().getWindow());
-			try {
-				Thread.sleep(millis);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			tooltip.hide();
-			System.out.println("Hiding tooltip");
-		}
+			Runnable run = () -> {
+				System.out.println("showing tooltip");
+				tooltip.show(control.getScene().getWindow());
+				try {
+					Thread.sleep(millis);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				tooltip.hide();
+				System.out.println("Hiding tooltip");
+			};
+			run.run();
+		};
+			
 		
 	}
 	
@@ -401,6 +406,7 @@ public class ControllerAddressBook implements Initializable{
 	public void setOnCloseRequest(){
 		accordionMain.getScene().getWindow().setOnCloseRequest( event -> {
 			System.out.println("Closing window detected. Saving all entries!");
+			
 			manager.saveAll();
 		});
 	}
