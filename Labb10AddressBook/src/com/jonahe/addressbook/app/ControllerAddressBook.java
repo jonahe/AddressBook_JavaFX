@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javafx.animation.FadeTransition;
 import javafx.beans.binding.Bindings;
@@ -32,8 +34,10 @@ import javafx.scene.control.Accordion;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Control;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -93,6 +97,9 @@ public class ControllerAddressBook implements Initializable{
 
 	
 	// FXML variables
+	
+	@FXML
+	ButtonBar saveButtonWrapper;
 	
 	// background
 	@FXML
@@ -207,7 +214,17 @@ public class ControllerAddressBook implements Initializable{
 		listViewConnections.setTooltip(new Tooltip("Right-click on entry in either list to add/remove"));
 		listViewConnections.setCellFactory(listView -> new CustomListCell(maleImage, femaleImage, editImage, addContactImage, removeContactImage, this, false));
 		
-		inEditOrCreationModeProperty.addListener((event, old, newVal) -> System.out.println("changed edit mode")); 
+		// disabling controlls in viewing mode
+		inEditOrCreationModeProperty.addListener((event, old, newVal) -> {
+			System.out.println("changed edit mode");
+			if(newVal) {
+				txtFldFirstName.requestFocus();
+				setFormDisable(false);
+			} else {
+				setFormDisable(true);
+				//txtFldFirstName.setDisable(true);
+			}
+		});
 		
 		
 		//TODO: extract methods
@@ -266,21 +283,39 @@ public class ControllerAddressBook implements Initializable{
 		}
 		
 		
+		//Validate phone number
+//		String reg= "([\\+(]?(\\d){2,}[)]?[- \\.]?(\\d){2,}[- \\.]?(\\d){2,}[- \\.]?(\\d){2,}[- \\.]?(\\d){2,})|([\\+(]?(\\d){2,}[)]?[- \\.]?(\\d){2,}[- \\.]?(\\d){2,}[- \\.]?(\\d){2,})|([\\+(]?(\\d){2,}[)]?[- \\.]?(\\d){2,}[- \\.]?(\\d){2,})";
+//		Pattern regex = Pattern.compile(reg);
+//		Predicate<String> matcher = regex.asPredicate();
+//				
+//		txtFldPhoneNum.textProperty().addListener( event -> {
+//			if(inEditOrCreationModeProperty.get()) {
+//				String s = txtFldPhoneNum.getText();
+//				if(!matcher.equals(s) && !s.isEmpty()) {
+//					txtFldPhoneNum.setStyle("-fx-background-color: red");
+//				} else {
+//					txtFldPhoneNum.setStyle(null);
+//				}
+//				
+//			}
+//		});
+		
+		
 		
 		// don't forget to save
-		btnSaveContact.setTooltip(new Tooltip("Don't forget to save changes!"));
-		inEditOrCreationModeProperty.addListener((event) -> {
-			if(inEditOrCreationModeProperty.get()) {
-				btnSaveContact.getTooltip().show(btnSaveContact.getScene().getWindow());
-				try {
-					Thread.sleep(200);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				btnSaveContact.getTooltip().hide();
-			}
-		});
+//		btnSaveContact.setTooltip(new Tooltip("Don't forget to save changes!"));
+//		inEditOrCreationModeProperty.addListener((event) -> {
+//			if(inEditOrCreationModeProperty.get()) {
+//				btnSaveContact.getTooltip().show(btnSaveContact.getScene().getWindow());
+//				try {
+//					Thread.sleep(200);
+//				} catch (Exception e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				btnSaveContact.getTooltip().hide();
+//			}
+//		});
 		
 		
 		// confirmation save
@@ -300,10 +335,64 @@ public class ControllerAddressBook implements Initializable{
 		// also preselect the first element
 		listViewConnections.getSelectionModel().select(0);
 		
+		// TODO
+		// disable save button if first and last name is not set
+		btnSaveContact.disableProperty().bind((txtFldFirstName.textProperty().isEmpty().or(txtFldLastName.textProperty().isEmpty())));
+		Tooltip tt = new Tooltip("Contact must have both first and last name");
+		
+		btnSaveContact.disableProperty().addListener(event -> {
+			if(btnSaveContact.disabledProperty().get()){
+				if(inEditOrCreationModeProperty.get()) {
+					System.out.println("setting tooltip");
+					//Tooltip.install(saveButtonWrapper, tt);
+					saveButtonWrapper.setTooltip(tt);
+					//saveButtonWrapper.getTooltip().show(saveButtonWrapper.getScene().getWindow(), saveButtonWrapper.getLayoutX(), saveButtonWrapper.getLayoutY());
+					// saveButtonWrapper.getTooltip().show(saveButtonWrapper.getScene().getWindow());
+					showTooltipForXMillis(saveButtonWrapper, 1);
+				}
+			} else {
+				if(inEditOrCreationModeProperty.get()) {
+					if(saveButtonWrapper.getTooltip() != null) {
+						// saveButtonWrapper.getTooltip().hide();						
+						System.out.println("Removing tooltip");
+						Tooltip.uninstall(saveButtonWrapper, tt);
+					}
+				}
+			}
+		});
+		
+		saveButtonWrapper.setOnMouseEntered( e -> {
+			System.out.println("wrapper entered");
+		});
+		
+		btnDelete.disableProperty().bind(inEditOrCreationModeProperty);
+		
+		inEditOrCreationModeProperty.set(true);
 		
 	}
 	
+	private void setFormDisable(boolean disable){
+		datePicker.setDisable(disable);
+		comboBox_Country.setDisable(disable);
+		comboBox_Gender.setDisable(disable);
+	}
 	
+	private void showTooltipForXMillis(Control control, int millis) {
+		Tooltip tooltip = control.getTooltip();
+		if(tooltip != null) {
+			System.out.println("showing tooltip");
+			tooltip.show(control.getScene().getWindow());
+			try {
+				Thread.sleep(millis);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			tooltip.hide();
+			System.out.println("Hiding tooltip");
+		}
+		
+	}
 	
 	/**
 	 * NOTE: this cannot be called during initialization, as it needs the scene. this is instead called from main, after
@@ -459,7 +548,7 @@ public class ControllerAddressBook implements Initializable{
 		Button clickedBtn = (Button) event.getSource();
 		// see if we're saving a new entry or just saving changes to old one.
 		String btnText = clickedBtn.getText();
-		if(btnText.equals("Save new entry")){
+		if(btnText.equals("Save contact")){
 			try{
 				System.out.println("Trying to create new entry");
 				AddressBookEntry entry = formHelper.createEntryFromFields();

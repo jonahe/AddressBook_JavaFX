@@ -123,7 +123,7 @@ public class EntryJavaFXMediator {
 		clearFields();
 		setTextFieldEditability(true);
 		btnSaveContact.setVisible(true);
-		btnSaveContact.setText("Save new entry");
+		btnSaveContact.setText("Save contact");
 		// set focus
 		txtFldFirstName.requestFocus();
 	}

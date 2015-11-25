@@ -9,7 +9,7 @@
 
 #root {
 	-fx-focus-color: #A13D30;
-	 -fx-accent: #A13D30;
+	/*  -fx-accent: #A13D30; */
 }
 
 .list-cell:empty {
@@ -30,3 +30,10 @@
 	-fx-border-color: #d2d2d2;
 }
 
+:disabled {
+  -fx-opacity: 0.93;
+}
+
+.button:disabled {
+  -fx-opacity: 0.60;
+}
